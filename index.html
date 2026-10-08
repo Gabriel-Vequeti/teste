@@ -425,6 +425,7 @@
 
     /* Vital bar colors */
     .bar-health { background: linear-gradient(90deg, #ef4444, #f43f5e); }
+    .bar-sleep { background: linear-gradient(90deg, #6366f1, #a78bfa); }
     .bar-energy { background: linear-gradient(90deg, #0284c7, #38bdf8); }
     .bar-hunger { background: linear-gradient(90deg, #ea580c, #f59e0b); }
     .bar-edu { background: linear-gradient(90deg, #7c3aed, #a855f7); }
@@ -518,6 +519,14 @@
     }
     .btn-quick.eat:hover:not(:disabled) {
       background: rgba(245, 158, 11, 0.25);
+    }
+    .btn-quick.rest {
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--purple);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    .btn-quick.rest:hover:not(:disabled) {
+      background: rgba(139, 92, 246, 0.25);
     }
     .btn-quick:disabled {
       opacity: 0.45;
@@ -1088,18 +1097,20 @@
     /* Toast Notification System */
     .toast-container {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 14px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
       z-index: 30000;
       display: flex;
       flex-direction: column;
       gap: 10px;
       pointer-events: none;
-      max-width: 360px;
-      width: calc(100vw - 48px);
+      max-width: 420px;
+      width: min(420px, calc(100vw - 32px));
     }
     .toast {
-      background: var(--bg-card-elevated);
+      background: rgba(30, 41, 69, 0.96);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: 12px 16px;
@@ -1112,12 +1123,12 @@
       transition: all 0.3s ease;
     }
     @keyframes slideInRight {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     .toast.hide {
       opacity: 0;
-      transform: translateX(100%);
+      transform: translateY(8px);
     }
     .toast-icon {
       font-size: 1.5rem;
@@ -1237,7 +1248,81 @@
         grid-template-columns: 1fr;
       }
     }
-  </style>
+  
+    /* =========================
+       COLLECTIONS
+    ========================= */
+    .collections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .collection-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 210px;
+      border: 1px solid rgba(148,163,184,.18);
+      border-radius: 16px;
+      padding: 16px;
+      background: linear-gradient(145deg, rgba(15,23,42,.94), rgba(30,41,59,.72));
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .collection-card:hover { transform: translateY(-2px); border-color: rgba(56,189,248,.35); }
+    .collection-card.owned { box-shadow: 0 0 24px rgba(56,189,248,.06); }
+    .collection-card.sold { opacity: .72; }
+    .collection-card.locked { filter: saturate(.25); opacity: .72; }
+    .collection-icon {
+      width: 58px; height: 58px; display:flex; align-items:center; justify-content:center;
+      border-radius: 14px; font-size: 2rem; margin-bottom: 10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .collection-name { font-weight: 800; color:#fff; margin-bottom:4px; }
+    .collection-meta { font-size:.78rem; color:var(--text-muted); line-height:1.55; }
+    .rarity-pill {
+      display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border-radius:999px;
+      font-size:.7rem; font-weight:800; margin-top:7px; border:1px solid currentColor;
+    }
+    .rarity-common { color:#86efac; background:rgba(34,197,94,.08); }
+    .rarity-rare { color:#60a5fa; background:rgba(59,130,246,.08); }
+    .rarity-mythic { color:#c084fc; background:rgba(168,85,247,.10); }
+    .rarity-legendary { color:#facc15; background:rgba(234,179,8,.10); box-shadow:0 0 16px rgba(250,204,21,.12); }
+    .collection-toolbar {
+      display:flex; flex-wrap:wrap; gap:8px; margin:16px 0;
+      padding:12px; border:1px solid rgba(148,163,184,.14); border-radius:14px;
+      background:rgba(15,23,42,.45);
+    }
+    .collection-toolbar select, .collection-toolbar input {
+      min-height:38px; border-radius:9px; border:1px solid rgba(148,163,184,.2);
+      background:#0f172a; color:#fff; padding:7px 10px;
+    }
+    .collection-progress {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:14px;
+    }
+    .collection-stat {
+      padding:12px; border-radius:12px; background:rgba(15,23,42,.6);
+      border:1px solid rgba(148,163,184,.12);
+    }
+    .collection-stat strong { display:block; color:#fff; font-size:1.05rem; margin-top:3px; }
+    .collection-progress-bar { height:7px; border-radius:99px; background:rgba(148,163,184,.12); overflow:hidden; margin-top:8px; }
+    .collection-progress-bar > div { height:100%; background:var(--primary); border-radius:99px; transition:width .3s ease; }
+    .collection-discovery {
+      text-align:center; max-width:520px;
+      border:1px solid rgba(56,189,248,.35);
+      box-shadow:0 0 40px rgba(56,189,248,.12);
+    }
+    .collection-discovery.common { border-color:rgba(34,197,94,.35); }
+    .collection-discovery.rare { border-color:rgba(59,130,246,.55); box-shadow:0 0 45px rgba(59,130,246,.16); }
+    .collection-discovery.mythic { border-color:rgba(168,85,247,.65); box-shadow:0 0 55px rgba(168,85,247,.2); }
+    .collection-discovery.legendary { border-color:rgba(250,204,21,.75); box-shadow:0 0 65px rgba(250,204,21,.24); animation: collectionPulse 1.4s ease-in-out infinite alternate; }
+    .discovery-icon { font-size:5rem; margin:6px 0 10px; filter:drop-shadow(0 0 16px rgba(255,255,255,.18)); }
+    @keyframes collectionPulse { from { transform:scale(1); } to { transform:scale(1.025); } }
+    @media (max-width: 640px) {
+      .collections-grid { grid-template-columns:1fr; }
+      .collection-toolbar > * { flex:1 1 140px; }
+    }
+
+</style>
 </head>
 <body>
 
@@ -1305,6 +1390,22 @@
             <div class="vital-val" id="val-happiness">70%</div>
           </div>
 
+          <div class="vital-item" title="Sua vida representa seu estado físico. Fome, privação de sono e energia muito baixa podem reduzi-la.">
+            <div class="vital-label">❤️ Vida</div>
+            <div class="vital-bar-track">
+              <div class="vital-bar-fill bar-health" id="bar-health" style="width: 100%;"></div>
+            </div>
+            <div class="vital-val" id="val-health">100%</div>
+          </div>
+
+          <div class="vital-item" title="Quanto maior a privação de sono, menor sua recuperação e desempenho.">
+            <div class="vital-label">💤 Sono</div>
+            <div class="vital-bar-track">
+              <div class="vital-bar-fill bar-sleep" id="bar-sleep" style="width: 100%;"></div>
+            </div>
+            <div class="vital-val" id="val-sleep">100%</div>
+          </div>
+
           <div class="vital-item" title="Energia necessária para trabalhar e estudar. Recupere dormindo!">
             <div class="vital-label">⚡ Energia</div>
             <div class="vital-bar-track">
@@ -1365,6 +1466,9 @@
             <button class="btn-quick eat" id="btn-quick-eat" title="Alimente-se para recuperar saciedade">
               🥪 Comer Rápido
             </button>
+            <button class="btn-quick rest" id="btn-quick-rest" title="Recupera energia sem avançar o dia">
+              🧘 Descansar
+            </button>
           </div>
         </div>
 
@@ -1383,6 +1487,7 @@
         <button class="tab-btn" data-tab="tab-lazer">🎮 Lazer & Comida</button>
         <button class="tab-btn" data-tab="tab-objetivos">🎯 Objetivos <span class="tab-badge" id="badge-obj">3</span></button>
         <button class="tab-btn" data-tab="tab-conquistas">🏆 Conquistas <span class="tab-badge" id="badge-ach">0</span></button>
+        <button class="tab-btn" data-tab="tab-colecoes">🗃️ Coleções <span class="tab-badge" id="badge-collections">0</span></button>
         <button class="tab-btn" data-tab="tab-estatisticas">📊 Estatísticas</button>
       </nav>
     </div>
@@ -1392,7 +1497,7 @@
       <div class="section-header">
         <div>
           <h2 class="section-title">💼 Mercado de Trabalho & Carreira</h2>
-          <p class="section-subtitle">Trabalhe para ganhar sua renda diária. Estude para se qualificar a cargos de prestígio!</p>
+          <p class="section-subtitle">Trabalhe, estude e acumule experiência para subir na carreira. Salários maiores exigem qualificação e tempo de carreira.</p>
         </div>
       </div>
 
@@ -1556,7 +1661,49 @@
       </div>
     </section>
 
-    <!-- TAB 10: ESTATÍSTICAS -->
+    <!-- TAB 10: COLEÇÕES -->
+    <section class="tab-pane" id="tab-colecoes">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🗃️ Coleções & Descobertas</h2>
+          <p class="section-subtitle">Encontre itens raros durante sua jornada, complete categorias e construa uma coleção de valor.</p>
+        </div>
+      </div>
+
+      <div class="collection-progress" id="collection-stats"></div>
+
+      <div class="collection-toolbar">
+        <select id="collection-category-filter" onchange="UI.renderCollections()">
+          <option value="all">Todas as categorias</option>
+          <option value="carros">🚗 Carros</option>
+          <option value="artefatos">🏺 Artefatos</option>
+          <option value="joias">💎 Joias</option>
+          <option value="trofeus">🏆 Troféus</option>
+          <option value="quadros">🖼️ Quadros</option>
+        </select>
+        <select id="collection-rarity-filter" onchange="UI.renderCollections()">
+          <option value="all">Todas as raridades</option>
+          <option value="comum">🟢 Comum</option>
+          <option value="raro">🔵 Raro</option>
+          <option value="mitico">🟣 Mítico</option>
+          <option value="lendario">🟡 Lendário</option>
+        </select>
+        <select id="collection-sort" onchange="UI.renderCollections()">
+          <option value="rarity">Ordenar: Raridade</option>
+          <option value="value">Ordenar: Valor</option>
+          <option value="name">Ordenar: Nome</option>
+          <option value="recent">Ordenar: Mais recentes</option>
+          <option value="category">Ordenar: Categoria</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--text-muted);padding:0 4px;">
+          <input type="checkbox" id="collection-undiscovered" onchange="UI.renderCollections()"> Mostrar apenas não descobertos
+        </label>
+      </div>
+
+      <div class="collections-grid" id="collections-grid"></div>
+    </section>
+
+    <!-- TAB 11: ESTATÍSTICAS -->
     <section class="tab-pane" id="tab-estatisticas">
       <div class="section-header">
         <div>
@@ -1578,7 +1725,7 @@
               <span class="card-meta-value" id="stat-shifts-worked">0</span>
             </div>
             <div class="card-meta-row">
-              <span class="card-meta-label">Maior Salário Obtido:</span>
+              <span class="card-meta-label">Maior Salário Diário Obtido:</span>
               <span class="card-meta-value" id="stat-highest-salary">R$ 0/dia</span>
             </div>
           </div>
@@ -1617,6 +1764,14 @@
               <span class="card-meta-label">Viagens Realizadas:</span>
               <span class="card-meta-value" id="stat-total-trips">0</span>
             </div>
+            <div class="card-meta-row">
+              <span class="card-meta-label">Dias de Carreira:</span>
+              <span class="card-meta-value" id="stat-career-days">0</span>
+            </div>
+            <div class="card-meta-row">
+              <span class="card-meta-label">Gasto com Alimentação:</span>
+              <span class="card-meta-value" id="stat-food-spent">R$ 0</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1637,6 +1792,20 @@
 
   </main>
 
+  <!-- MODAL: DESCOBERTA DE COLEÇÃO -->
+  <div class="modal-overlay" id="modal-collection-discovery">
+    <div class="modal-box collection-discovery" id="collection-discovery-box">
+      <div style="font-size:.75rem;font-weight:800;letter-spacing:.12em;color:var(--primary);">NOVA COLEÇÃO!</div>
+      <div class="discovery-icon" id="collection-discovery-icon">🎁</div>
+      <h2 id="collection-discovery-name" style="font-family:var(--font-heading);font-size:1.65rem;margin-bottom:5px;color:#fff;"></h2>
+      <div id="collection-discovery-rarity"></div>
+      <div id="collection-discovery-category" style="color:var(--text-muted);margin-top:8px;"></div>
+      <p id="collection-discovery-desc" style="color:var(--text-muted);line-height:1.6;margin:16px auto;max-width:420px;"></p>
+      <div id="collection-discovery-value" style="font-weight:800;color:var(--gold);font-size:1.1rem;margin-bottom:18px;"></div>
+      <button class="btn btn-primary" onclick="UI.closeModal('modal-collection-discovery'); UI.renderAll();">Continuar</button>
+    </div>
+  </div>
+
   <!-- MODAL: INTRO DO JOGO -->
   <div class="modal-overlay" id="modal-intro">
     <div class="modal-box" style="text-align: center; border-color: rgba(56, 189, 248, 0.4);">
@@ -1652,7 +1821,7 @@
           <strong>Sua missão:</strong> construir uma vida digna, vencer as dificuldades do dia a dia e acumular seu <strong>Primeiro Milhão de Reais</strong>.
         </p>
         <p style="margin-bottom: 10px; color: var(--text-muted);">
-          ⚡ <strong>Equilíbrio:</strong> Trabalhe, estude e invista, mas não esqueça de descansar, comer bem e se divertir para manter sua felicidade alta!
+          ⚡ <strong>Equilíbrio:</strong> Trabalhe, estude e invista, mas cuide da sua Vida, Energia, Fome e Sono para sustentar sua evolução.
         </p>
         <p style="color: var(--text-muted);">
           👑 <strong>E depois do milhão?</strong> O jogo continua com novos horizontes, negócios multinacionais, supercarros, iates e ilhas particulares!
@@ -1986,140 +2155,195 @@
        ========================================================================== */
 
     const JOBS_DATA = [
-      // Education 0
-      { id: 'entregador', name: 'Entregador de App', salary: 80, reqEdu: 0, energyCost: 25, hungerCost: 15, icon: '🛵', desc: 'Pedalando e acelerando pela cidade para entregar comida e encomendas.' },
-      { id: 'atendente', name: 'Atendente de Lanchonete', salary: 100, reqEdu: 0, energyCost: 25, hungerCost: 15, icon: '🍔', desc: 'Atendendo clientes no balcão e organizando pedidos com sorriso no rosto.' },
-      { id: 'aux_estoque', name: 'Auxiliar de Almoxarifado', salary: 120, reqEdu: 0, energyCost: 28, hungerCost: 18, icon: '📦', desc: 'Carregando caixas e controlando mercadorias no depósito.' },
-
-      // Education 20
-      { id: 'assistente_adm', name: 'Assistente Administrativo', salary: 160, reqEdu: 20, energyCost: 30, hungerCost: 15, icon: '📋', desc: 'Organizando planilhas, notas fiscais e relatórios no escritório.' },
-      { id: 'vendedor', name: 'Vendedor Comercial', salary: 210, reqEdu: 20, energyCost: 30, hungerCost: 15, icon: '🏷️', desc: 'Negociando produtos e batendo metas de vendas para a loja.' },
-      { id: 'suporte_ti', name: 'Técnico de Suporte TI', salary: 260, reqEdu: 20, energyCost: 30, hungerCost: 15, icon: '🖥️', desc: 'Formatando computadores e resolvendo problemas de rede.' },
-
-      // Education 40
-      { id: 'designer', name: 'Designer de Interfaces (UI/UX)', salary: 420, reqEdu: 40, energyCost: 32, hungerCost: 15, icon: '🎨', desc: 'Criando layouts modernos e experiências visuais para apps e sites.' },
-      { id: 'programador', name: 'Programador Full Stack', salary: 520, reqEdu: 40, energyCost: 35, hungerCost: 15, icon: '💻', desc: 'Desenvolvendo plataformas web e codificando sistemas robustos.' },
-      { id: 'analista_fin', name: 'Analista Financeiro Pleno', salary: 580, reqEdu: 40, energyCost: 35, hungerCost: 15, icon: '📊', desc: 'Analisando fluxo de caixa, investimentos e viabilidade de projetos.' },
-
-      // Education 60
-      { id: 'engenheiro', name: 'Engenheiro de Software Sênior', salary: 1200, reqEdu: 60, energyCost: 40, hungerCost: 18, icon: '⚙️', desc: 'Arquiteto de infraestruturas em nuvem e líder de equipes de engenharia.' },
-      { id: 'gerente', name: 'Gerente de Projetos Estratégicos', salary: 1450, reqEdu: 60, energyCost: 40, hungerCost: 18, icon: '💼', desc: 'Coordenando operações e garantindo a entrega pontual de metas corporativas.' },
-      { id: 'especialista_ia', name: 'Especialista em Inteligência Artificial', salary: 1900, reqEdu: 60, energyCost: 42, hungerCost: 18, icon: '🤖', desc: 'Treinando modelos avançados de machine learning para grandes empresas.' },
-
-      // Education 80
-      { id: 'diretor', name: 'Diretor de Operações (COO)', salary: 3800, reqEdu: 80, energyCost: 45, hungerCost: 20, icon: '🏢', desc: 'Comandando a eficiência operacional de corporações de grande porte.' },
-      { id: 'executivo', name: 'Executivo Financeiro (CFO)', salary: 4900, reqEdu: 80, energyCost: 48, hungerCost: 20, icon: '📈', desc: 'Gerenciando tesourarias milionárias e relações com investidores institucionais.' },
-      { id: 'consultor', name: 'Consultor Internacional de Negócios', salary: 6200, reqEdu: 80, energyCost: 45, hungerCost: 20, icon: '🌐', desc: 'Orientando multinacionais sobre fusões, aquisições e expansão global.' },
-
-      // Education 100
-      { id: 'ceo', name: 'CEO Corporativo Global', salary: 15000, reqEdu: 100, energyCost: 50, hungerCost: 20, icon: '👑', desc: 'O líder máximo da companhia, decidindo os rumos do mercado bilionário.' },
-      { id: 'hedge_fund', name: 'Gestor de Fundo Hedge Exclusivo', salary: 22000, reqEdu: 100, energyCost: 48, hungerCost: 20, icon: '🏛️', desc: 'Operando bilhões de dólares nos mercados financeiros mais sofisticados do mundo.' },
-      { id: 'presidente', name: 'Presidente do Conselho de Administração', salary: 32000, reqEdu: 100, energyCost: 50, hungerCost: 20, icon: '💎', desc: 'Comanda as maiores holdings mundiais, exercendo influência geopolítica e econômica.' }
+      { id: 'entregador', name: 'Entregador de App', salary: 73, monthlySalary: 1900, reqEdu: 0, reqShifts: 0, energyCost: 22, hungerCost: 12, icon: '🛵', desc: 'Entregas e logística urbana para começar a construir experiência profissional.' },
+      { id: 'atendente', name: 'Atendente de Lanchonete', salary: 73, monthlySalary: 1900, reqEdu: 0, reqShifts: 0, energyCost: 24, hungerCost: 12, icon: '🍔', desc: 'Atendimento ao cliente e operação de loja em uma rotina dinâmica.' },
+      { id: 'aux_estoque', name: 'Auxiliar de Almoxarifado', salary: 85, monthlySalary: 2200, reqEdu: 0, reqShifts: 0, energyCost: 27, hungerCost: 15, icon: '📦', desc: 'Controle de estoque, separação de pedidos e movimentação de mercadorias.' },
+      { id: 'operador_caixa', name: 'Operador de Caixa', salary: 88, monthlySalary: 2300, reqEdu: 5, reqShifts: 0, energyCost: 25, hungerCost: 12, icon: '🧾', desc: 'Atendimento, pagamentos e organização do caixa de uma loja.' },
+      { id: 'aux_producao', name: 'Auxiliar de Produção', salary: 96, monthlySalary: 2500, reqEdu: 5, reqShifts: 0, energyCost: 30, hungerCost: 16, icon: '🏭', desc: 'Apoio à produção industrial e cumprimento de metas operacionais.' },
+      { id: 'recepcionista', name: 'Recepcionista', salary: 104, monthlySalary: 2700, reqEdu: 10, reqShifts: 0, energyCost: 25, hungerCost: 12, icon: '🛎️', desc: 'Recepção de clientes, agenda e rotinas administrativas.' },
+      { id: 'assistente_adm', name: 'Assistente Administrativo', salary: 123, monthlySalary: 3200, reqEdu: 20, reqShifts: 20, energyCost: 28, hungerCost: 13, icon: '📋', desc: 'Planilhas, documentos, notas fiscais e rotinas administrativas.' },
+      { id: 'vendedor', name: 'Vendedor Comercial', salary: 138, monthlySalary: 3600, reqEdu: 20, reqShifts: 15, energyCost: 30, hungerCost: 14, icon: '🏷️', desc: 'Vendas consultivas e relacionamento com clientes.' },
+      { id: 'suporte_ti', name: 'Técnico de Suporte TI', salary: 162, monthlySalary: 4200, reqEdu: 25, reqShifts: 20, energyCost: 30, hungerCost: 14, icon: '🖥️', desc: 'Suporte técnico, redes, manutenção e atendimento interno.' },
+      { id: 'tecnico_enfermagem', name: 'Técnico de Enfermagem', salary: 162, monthlySalary: 4200, reqEdu: 25, reqShifts: 25, energyCost: 34, hungerCost: 16, icon: '🩺', desc: 'Atendimento técnico em saúde sob supervisão profissional.' },
+      { id: 'eletricista', name: 'Eletricista Profissional', salary: 192, monthlySalary: 5000, reqEdu: 30, reqShifts: 30, energyCost: 38, hungerCost: 18, icon: '⚡', desc: 'Instalações e manutenção elétrica com responsabilidade técnica.' },
+      { id: 'designer', name: 'Designer de Interfaces (UI/UX)', salary: 250, monthlySalary: 6500, reqEdu: 40, reqShifts: 35, energyCost: 32, hungerCost: 14, icon: '🎨', desc: 'Criação de interfaces, produtos digitais e experiências de usuário.' },
+      { id: 'programador', name: 'Programador Full Stack', salary: 288, monthlySalary: 7500, reqEdu: 40, reqShifts: 35, energyCost: 36, hungerCost: 15, icon: '💻', desc: 'Desenvolvimento de sistemas web e aplicações completas.' },
+      { id: 'analista_fin', name: 'Analista Financeiro Pleno', salary: 308, monthlySalary: 8000, reqEdu: 45, reqShifts: 40, energyCost: 36, hungerCost: 15, icon: '📊', desc: 'Análise financeira, orçamento, investimentos e indicadores.' },
+      { id: 'contador', name: 'Contador', salary: 346, monthlySalary: 9000, reqEdu: 50, reqShifts: 50, energyCost: 38, hungerCost: 16, icon: '🧮', desc: 'Contabilidade, planejamento tributário e análise patrimonial.' },
+      { id: 'enfermeiro', name: 'Enfermeiro', salary: 385, monthlySalary: 10000, reqEdu: 50, reqShifts: 55, energyCost: 40, hungerCost: 17, icon: '🏥', desc: 'Gestão de cuidados e atuação profissional em saúde.' },
+      { id: 'engenheiro', name: 'Engenheiro de Software Sênior', salary: 538, monthlySalary: 14000, reqEdu: 60, reqShifts: 80, energyCost: 40, hungerCost: 18, icon: '⚙️', desc: 'Arquitetura de software, nuvem e liderança técnica.' },
+      { id: 'gerente', name: 'Gerente de Projetos Estratégicos', salary: 615, monthlySalary: 16000, reqEdu: 60, reqShifts: 90, energyCost: 42, hungerCost: 18, icon: '💼', desc: 'Gestão de equipes, orçamento, prazos e projetos estratégicos.' },
+      { id: 'especialista_ia', name: 'Especialista em Inteligência Artificial', salary: 769, monthlySalary: 20000, reqEdu: 65, reqShifts: 100, energyCost: 44, hungerCost: 18, icon: '🤖', desc: 'Desenvolvimento e liderança de soluções avançadas de IA.' },
+      { id: 'advogado', name: 'Advogado Corporativo Sênior', salary: 846, monthlySalary: 22000, reqEdu: 65, reqShifts: 110, energyCost: 42, hungerCost: 17, icon: '⚖️', desc: 'Consultoria jurídica e negociação de contratos empresariais.' },
+      { id: 'medico', name: 'Médico Especialista', salary: 1154, monthlySalary: 30000, reqEdu: 70, reqShifts: 130, energyCost: 46, hungerCost: 19, icon: '🩺', desc: 'Atuação médica especializada após longa formação e experiência.' },
+      { id: 'diretor', name: 'Diretor de Operações (COO)', salary: 1346, monthlySalary: 35000, reqEdu: 80, reqShifts: 150, energyCost: 45, hungerCost: 20, icon: '🏢', desc: 'Liderança operacional de grandes empresas e equipes.' },
+      { id: 'executivo', name: 'Executivo Financeiro (CFO)', salary: 1923, monthlySalary: 50000, reqEdu: 80, reqShifts: 180, energyCost: 48, hungerCost: 20, icon: '📈', desc: 'Gestão financeira de corporações, capital e relações com investidores.' },
+      { id: 'consultor', name: 'Consultor Internacional de Negócios', salary: 2308, monthlySalary: 60000, reqEdu: 80, reqShifts: 160, energyCost: 44, hungerCost: 19, icon: '🌐', desc: 'Estratégia, expansão internacional, fusões e aquisições.' },
+      { id: 'diretor_tecnologia', name: 'Diretor de Tecnologia (CTO)', salary: 2692, monthlySalary: 70000, reqEdu: 85, reqShifts: 190, energyCost: 46, hungerCost: 19, icon: '🧠', desc: 'Define estratégia tecnológica e lidera grandes organizações de engenharia.' },
+      { id: 'socio_consultoria', name: 'Sócio de Consultoria Estratégica', salary: 3077, monthlySalary: 80000, reqEdu: 90, reqShifts: 210, energyCost: 45, hungerCost: 19, icon: '💎', desc: 'Atuação de alta senioridade em estratégia e decisões corporativas.' },
+      { id: 'ceo', name: 'CEO Corporativo Global', salary: 3846, monthlySalary: 100000, reqEdu: 100, reqShifts: 240, energyCost: 50, hungerCost: 20, icon: '👑', desc: 'Liderança executiva máxima de uma grande companhia.' },
+      { id: 'gestor_assets', name: 'Gestor de Asset Management', salary: 4615, monthlySalary: 120000, reqEdu: 100, reqShifts: 260, energyCost: 48, hungerCost: 20, icon: '🏛️', desc: 'Gestão profissional de grandes carteiras e estratégias de investimento.' },
+      { id: 'hedge_fund', name: 'Gestor de Fundo Hedge Exclusivo', salary: 5769, monthlySalary: 150000, reqEdu: 100, reqShifts: 280, energyCost: 48, hungerCost: 20, icon: '💼', desc: 'Gestão de estratégias sofisticadas de capital e mercados.' },
+      { id: 'presidente', name: 'Presidente do Conselho de Administração', salary: 7692, monthlySalary: 200000, reqEdu: 100, reqShifts: 320, energyCost: 50, hungerCost: 20, icon: '💎', desc: 'Liderança de holdings e decisões estratégicas de altíssimo nível.' },
+      { id: 'partner_global', name: 'Managing Partner Global', salary: 9615, monthlySalary: 250000, reqEdu: 100, reqShifts: 360, energyCost: 50, hungerCost: 20, icon: '🌎', desc: 'Sócio executivo global com participação em grandes operações corporativas.' },
     ];
 
     const EDUCATION_DATA = [
-      { id: 'basico', name: 'Curso Básico de Informática & Vendas', cost: 50, eduGain: 5, energyCost: 20, days: 1, icon: '📖', desc: 'Noções essenciais de computadores, atendimento e comunicação profissional.' },
-      { id: 'tecnico', name: 'Curso Técnico Profissionalizante', cost: 200, eduGain: 10, energyCost: 25, days: 1, icon: '🛠️', desc: 'Capacitação prática em áreas com alta demanda no mercado de trabalho.' },
-      { id: 'certificacao', name: 'Certificação de Tecnologia & Dados', cost: 800, eduGain: 10, energyCost: 25, days: 2, icon: '📜', desc: 'Exame de qualificação técnica reconhecido pela indústria corporativa.' },
-      { id: 'faculdade', name: 'Graduação Universitária (Bacharelado)', cost: 2000, eduGain: 20, energyCost: 30, days: 3, icon: '🎓', desc: 'Formação superior sólida com diploma universitário oficial.' },
-      { id: 'especializacao', name: 'Pós-Graduação & Especialização', cost: 10000, eduGain: 15, energyCost: 35, days: 4, icon: '📑', desc: 'Aprofundamento técnico e desenvolvimento de pensamento estratégico.' },
-      { id: 'mba', name: 'MBA Executivo em Liderança e Negócios', cost: 30000, eduGain: 20, energyCost: 40, days: 5, icon: '🏛️', desc: 'Programa de elite para formar líderes e diretores de alto escalão.' },
-      { id: 'doutorado', name: 'Doutorado / Fellow Internacional', cost: 80000, eduGain: 20, energyCost: 45, days: 7, repGain: 25, icon: '🔬', desc: 'Grau máximo acadêmico com publicações e reputação mundial inquestionável.' }
+      { id: 'basico', name: 'Curso Básico de Informática & Vendas', cost: 120, eduGain: 5, energyCost: 15, days: 1, reqEdu: 0, repGain: 0, icon: '📖', desc: 'Base para entrar no mercado de trabalho.' },
+      { id: 'tecnico', name: 'Curso Técnico Profissionalizante', cost: 1200, eduGain: 10, energyCost: 20, days: 2, reqEdu: 0, repGain: 0, icon: '🛠️', desc: 'Formação prática para áreas operacionais e técnicas.' },
+      { id: 'comercial', name: 'Formação em Vendas e Negociação', cost: 1800, eduGain: 8, energyCost: 20, days: 2, reqEdu: 10, repGain: 0, icon: '🤝', desc: 'Desenvolve comunicação, negociação e desempenho comercial.' },
+      { id: 'certificacao', name: 'Certificação de Tecnologia & Dados', cost: 3500, eduGain: 10, energyCost: 22, days: 3, reqEdu: 20, repGain: 0, icon: '📜', desc: 'Qualificação técnica para tecnologia e análise de dados.' },
+      { id: 'idiomas', name: 'Curso de Inglês Profissional', cost: 4500, eduGain: 8, energyCost: 18, days: 3, reqEdu: 15, repGain: 0, icon: '🌐', desc: 'Comunicação profissional para oportunidades nacionais e internacionais.' },
+      { id: 'faculdade', name: 'Graduação Universitária (Bacharelado)', cost: 18000, eduGain: 20, energyCost: 28, days: 8, reqEdu: 30, repGain: 0, icon: '🎓', desc: 'Formação superior para carreiras especializadas.' },
+      { id: 'pos', name: 'Pós-Graduação & Especialização', cost: 28000, eduGain: 12, energyCost: 30, days: 6, reqEdu: 55, repGain: 0, icon: '📑', desc: 'Aprofundamento técnico e especialização.' },
+      { id: 'mba', name: 'MBA Executivo em Liderança e Negócios', cost: 45000, eduGain: 15, energyCost: 32, days: 7, reqEdu: 70, repGain: 10, icon: '🏛️', desc: 'Formação voltada para gestão e liderança executiva.' },
+      { id: 'mestrado', name: 'Mestrado Profissional', cost: 60000, eduGain: 12, energyCost: 35, days: 8, reqEdu: 80, repGain: 10, icon: '🔬', desc: 'Pesquisa aplicada e especialização avançada.' },
+      { id: 'doutorado', name: 'Doutorado / Fellow Internacional', cost: 90000, eduGain: 16, energyCost: 40, days: 10, reqEdu: 90, repGain: 10, icon: '🧪', desc: 'Formação acadêmica avançada e reputação profissional.' },
+      { id: 'executive', name: 'Programa Executivo Global', cost: 120000, eduGain: 10, energyCost: 38, days: 8, reqEdu: 95, repGain: 10, icon: '🌎', desc: 'Programa avançado de estratégia, liderança e negócios globais.' },
     ];
 
     const HOUSING_DATA = [
-      { id: 'rua', name: 'Sem Imóvel (Albergue/Sofá de Amigo)', price: 0, rent: 0, maint: 0, happinessBonus: 0, icon: '🎒', desc: 'Dormindo de favor onde dá. É hora de mudar essa realidade!' },
-      { id: 'quarto_alugado', name: 'Quarto Alugado Compartilhado', price: 0, rent: 300, maint: 0, happinessBonus: 2, icon: '🛏️', isRent: true, desc: 'Um teto seguro e modesto para descansar à noite.' },
-      { id: 'kitnet', name: 'Kitnet no Centro', price: 20000, rent: 0, maint: 300, happinessBonus: 5, icon: '🏢', desc: 'Seu primeiro imóvel próprio! Compacto, funcional e sem pagar aluguel.' },
-      { id: 'casa_pequena', name: 'Casa Pequena de Bairro', price: 100000, rent: 0, maint: 800, happinessBonus: 10, icon: '🏡', desc: 'Quintal aconchegante, bairro tranquilo e espaço para viver com dignidade.' },
-      { id: 'casa_confortavel', name: 'Casa Confortável em Condomínio', price: 300000, rent: 0, maint: 2000, happinessBonus: 20, icon: '🏠', desc: 'Segurança 24 horas, piscina, churrasqueira e alto conforto diário.' },
-      { id: 'mansao', name: 'Mansão com Jardim e Piscina', price: 2000000, rent: 0, maint: 10000, happinessBonus: 35, icon: '🏰', desc: 'Área nobre, arquitetura deslumbrante e espaço de sobra para viver como rei.' },
-      // Post-million properties
-      { id: 'cobertura', name: 'Cobertura Triplex na Orla de Ipanema', price: 6000000, rent: 0, maint: 25000, happinessBonus: 45, icon: '🌇', desc: 'Vista cinematográfica para o mar, piscina de borda infinita e heliponto.' },
-      { id: 'mansao_alphaville', name: 'Mansão dos Famosos em Alphaville', price: 18000000, rent: 0, maint: 70000, happinessBonus: 60, icon: '✨', desc: 'Cinema privativo, adega subterrânea, 8 suítes e acabamento em mármore importado.' },
-      { id: 'casa_praia', name: 'Casa Cinematográfica em Angra dos Reis', price: 45000000, rent: 0, maint: 150000, happinessBonus: 75, icon: '🏖️', desc: 'Píer particular para atracar seu iate, praia privativa e paisagismo exuberante.' },
-      { id: 'fazenda', name: 'Mega Fazenda Produtiva com Haras', price: 100000000, rent: 0, maint: 300000, happinessBonus: 85, icon: '🐎', desc: 'Milhares de hectares, criação de cavalos campeões, lago particular e pista de pouso.' },
-      { id: 'ilha', name: 'Ilha Particular Exclusiva no Caribe', price: 350000000, rent: 0, maint: 1000000, happinessBonus: 100, icon: '🏝️', desc: 'Seu próprio paraíso soberano na Terra com água cristalina e privacidade total.' },
-      { id: 'palacio_futuro', name: 'Palácio Tecnológico Autossuficiente', price: 1200000000, rent: 0, maint: 3000000, happinessBonus: 100, icon: '🪐', desc: 'Fortaleza sustentável de última geração com automação quântica e luxo intergaláctico.' }
+      { id: 'rua', name: 'Sem Imóvel (Albergue/Sofá de Amigo)', price: 0, rent: 0, maint: 0, happinessBonus: 0, icon: '🎒', isRent: false, desc: 'Sem moradia própria. Uma fase inicial para superar.' },
+      { id: 'quarto_alugado', name: 'Quarto Alugado Compartilhado', price: 0, rent: 700, maint: 0, happinessBonus: 2, icon: '🛏️', isRent: true, desc: 'Moradia simples para começar com baixo custo.' },
+      { id: 'kitnet', name: 'Kitnet no Centro', price: 65000, rent: 0, maint: 250, happinessBonus: 5, icon: '🏢', isRent: false, desc: 'Primeiro imóvel próprio, compacto e funcional.' },
+      { id: 'casa_pequena', name: 'Casa Pequena de Bairro', price: 180000, rent: 0, maint: 650, happinessBonus: 10, icon: '🏡', isRent: false, desc: 'Casa acessível para quem já construiu uma reserva.' },
+      { id: 'apartamento', name: 'Apartamento de Dois Quartos', price: 320000, rent: 0, maint: 1100, happinessBonus: 14, icon: '🏙️', isRent: false, desc: 'Apartamento confortável em região urbana valorizada.' },
+      { id: 'casa_confortavel', name: 'Casa Confortável em Condomínio', price: 550000, rent: 0, maint: 1800, happinessBonus: 20, icon: '🏠', isRent: false, desc: 'Mais espaço, segurança e conforto.' },
+      { id: 'cobertura_media', name: 'Cobertura de Alto Padrão', price: 1200000, rent: 0, maint: 4000, happinessBonus: 28, icon: '🌇', isRent: false, desc: 'Cobertura ampla em região valorizada.' },
+      { id: 'mansao', name: 'Mansão com Jardim e Piscina', price: 2500000, rent: 0, maint: 8000, happinessBonus: 35, icon: '🏰', isRent: false, desc: 'Imóvel de luxo com grande área e lazer.' },
+      { id: 'cobertura', name: 'Cobertura Triplex na Orla de Ipanema', price: 6500000, rent: 0, maint: 18000, happinessBonus: 45, icon: '🌆', isRent: false, desc: 'Imóvel de altíssimo padrão com vista privilegiada.' },
+      { id: 'mansao_alphaville', name: 'Mansão dos Famosos em Alphaville', price: 15000000, rent: 0, maint: 45000, happinessBonus: 58, icon: '✨', isRent: false, desc: 'Residência de luxo com estrutura completa.' },
+      { id: 'casa_praia', name: 'Casa Cinematográfica em Angra dos Reis', price: 35000000, rent: 0, maint: 100000, happinessBonus: 70, icon: '🏖️', isRent: false, desc: 'Casa de alto luxo com acesso exclusivo ao litoral.' },
+      { id: 'fazenda', name: 'Mega Fazenda Produtiva com Haras', price: 90000000, rent: 0, maint: 250000, happinessBonus: 80, icon: '🐎', isRent: false, desc: 'Grande propriedade rural com produção e estrutura.' },
+      { id: 'ilha', name: 'Ilha Particular Exclusiva no Caribe', price: 300000000, rent: 0, maint: 850000, happinessBonus: 100, icon: '🏝️', isRent: false, desc: 'Patrimônio extraordinário e manutenção muito elevada.' },
+      { id: 'palacio_futuro', name: 'Palácio Tecnológico Autossuficiente', price: 1000000000, rent: 0, maint: 2500000, happinessBonus: 100, icon: '🪐', isRent: false, desc: 'Patrimônio extremo para o endgame.' },
     ];
 
     const VEHICLES_DATA = [
-      { id: 'a_pe', name: 'A Pé / Transporte Público', price: 0, maint: 30, happinessBonus: 0, icon: '🚶', desc: 'Pegando ônibus lotado ou caminhando bastante para economizar cada centavo.' },
-      { id: 'bicicleta', name: 'Bicicleta Urbana', price: 500, maint: 15, happinessBonus: 2, icon: '🚲', desc: 'Pedalada saudável para economizar na passagem e chegar rápido aos lugares.' },
-      { id: 'moto', name: 'Moto 160cc Econômica', price: 8000, maint: 80, happinessBonus: 5, icon: '🛵', desc: 'Agilidade no trânsito para nunca mais se atrasar nos seus compromissos.' },
-      { id: 'carro_usado', name: 'Carro Compacto Usado', price: 25000, maint: 250, happinessBonus: 10, icon: '🚗', desc: 'Ar-condicionado, som ligado e proteção contra os dias de chuva.' },
-      { id: 'suv', name: 'SUV Premium 4x4', price: 110000, maint: 900, happinessBonus: 18, icon: '🚙', desc: 'Espaço, potência e comodidade para viajar e desfilar com imponência.' },
-      { id: 'esportivo', name: 'Esportivo Alemão (Porsche 911)', price: 650000, maint: 4500, happinessBonus: 30, icon: '🏎️', desc: 'Ronco de motor inconfundível e aceleração de 0 a 100 km/h em 3 segundos.' },
-      // Post-million vehicles
-      { id: 'supercarro', name: 'Supercarro Italiano (Ferrari / Lambo)', price: 2500000, maint: 18000, happinessBonus: 45, icon: '🏎️', desc: 'Obra de arte sobre rodas que para o trânsito por onde passa.' },
-      { id: 'helicoptero', name: 'Helicóptero Executivo Biturbina', price: 12000000, maint: 80000, happinessBonus: 60, icon: '🚁', desc: 'Escape do trânsito pousando diretamente nos helipontos dos seus prédios.' },
-      { id: 'jato', name: 'Jato Particular Intercontinental', price: 120000000, maint: 600000, happinessBonus: 85, icon: '✈️', desc: 'Voe para qualquer continente sem escalas com cabine de luxo e serviço de bordo.' },
-      { id: 'iate', name: 'Mega Iate de Alto Luxo de 90 Metros', price: 400000000, maint: 2500000, happinessBonus: 100, icon: '🛥️', desc: 'Palácio flutuante com piscina, heliponto, submarino pessoal e tripulação exclusiva.' }
+      { id: 'a_pe', name: 'A Pé / Transporte Público', price: 0, maint: 50, happinessBonus: 0, icon: '🚶', desc: 'Transporte público e deslocamentos econômicos.' },
+      { id: 'bicicleta', name: 'Bicicleta Urbana', price: 1200, maint: 25, happinessBonus: 2, icon: '🚲', desc: 'Opção barata, prática e econômica.' },
+      { id: 'moto', name: 'Moto 160cc Econômica', price: 16000, maint: 100, happinessBonus: 5, icon: '🛵', desc: 'Agilidade com custo de manutenção relativamente baixo.' },
+      { id: 'carro_usado', name: 'Carro Compacto Usado', price: 45000, maint: 350, happinessBonus: 10, icon: '🚗', desc: 'Carro de entrada para quem já tem renda estável.' },
+      { id: 'hatch', name: 'Hatch Compacto Novo', price: 75000, maint: 550, happinessBonus: 13, icon: '🚘', desc: 'Carro novo e econômico para o dia a dia.' },
+      { id: 'sedan', name: 'Sedan Médio', price: 120000, maint: 850, happinessBonus: 17, icon: '🚙', desc: 'Conforto maior para uma fase de renda mais alta.' },
+      { id: 'suv', name: 'SUV Premium 4x4', price: 220000, maint: 1400, happinessBonus: 21, icon: '🚙', desc: 'Espaço, conforto e desempenho.' },
+      { id: 'luxo', name: 'Sedã de Luxo', price: 450000, maint: 2800, happinessBonus: 27, icon: '🚘', desc: 'Veículo premium com alto custo de propriedade.' },
+      { id: 'esportivo', name: 'Esportivo Alemão (Porsche 911)', price: 800000, maint: 5000, happinessBonus: 32, icon: '🏎️', desc: 'Esportivo de alto desempenho e manutenção elevada.' },
+      { id: 'supercarro', name: 'Supercarro Italiano', price: 2500000, maint: 16000, happinessBonus: 45, icon: '🏎️', desc: 'Carro de luxo extremo para o patrimônio milionário.' },
+      { id: 'helicoptero', name: 'Helicóptero Executivo Biturbina', price: 12000000, maint: 70000, happinessBonus: 60, icon: '🚁', desc: 'Transporte executivo com custo operacional elevado.' },
+      { id: 'jato', name: 'Jato Particular Intercontinental', price: 120000000, maint: 550000, happinessBonus: 85, icon: '✈️', desc: 'Aeronave particular para patrimônio extraordinário.' },
+      { id: 'iate', name: 'Mega Iate de Alto Luxo de 90 Metros', price: 400000000, maint: 2200000, happinessBonus: 100, icon: '🛥️', desc: 'Patrimônio de luxo com manutenção e operação gigantescas.' },
     ];
 
     const INVESTMENTS_DATA = [
-      {
-        id: 'poupanca',
-        name: 'Poupança Bancária',
-        icon: '🏦',
-        risk: 'Zero',
-        baseYield: 0.005, // 0.5% ao mês fixo
-        volatility: 0,
-        desc: 'O investimento mais tradicional e seguro. Rendimento modesto e sem risco.'
-      },
-      {
-        id: 'renda_fixa',
-        name: 'Renda Fixa & Tesouro Direto',
-        icon: '🏛️',
-        risk: 'Muito Baixo',
-        baseYield: 0.010, // 1% ao mês
-        volatility: 0.001,
-        desc: 'Títulos públicos e CDBs de grandes bancos. Retorno consistente e previsível.'
-      },
-      {
-        id: 'fiis',
-        name: 'Fundos Imobiliários (FIIs)',
-        icon: '🏢',
-        risk: 'Moderado',
-        baseYield: 0.009, // 0.9% dividendos mensais
-        volatility: 0.03,
-        minSwing: -0.03, // cota oscila entre -3% e +4% (média +0,5%)
-        maxSwing: 0.04,
-        desc: 'Receba "aluguéis" mensais isentos de imposto de galpões e shoppings.'
-      },
-      {
-        id: 'acoes',
-        name: 'Ações de Empresas (Bolsa de Valores)',
-        icon: '📈',
-        risk: 'Médio / Alto',
-        baseYield: 0.006, // dividendos
-        volatility: 0.12,
-        minSwing: -0.09, // oscila entre -9% e +12% (média +1,5%)
-        maxSwing: 0.12,
-        desc: 'Torne-se sócio de gigantes nacionais. Grandes lucros com oscilação diária.'
-      },
-      {
-        id: 'cripto',
-        name: 'Criptomoedas (Bitcoin & Web3)',
-        icon: '🪙',
-        risk: 'Alto',
-        baseYield: 0,
-        volatility: 0.35,
-        minSwing: -0.30, // oscila entre -30% e +38% (média +4%)
-        maxSwing: 0.38,
-        desc: 'Ativos digitais descentralizados com volatilidade extrema e chances de valorização explosiva.'
-      },
-      {
-        id: 'startups',
-        name: 'Venture Capital & Startups Anjo',
-        icon: '🚀',
-        risk: 'Muito Alto',
-        baseYield: 0,
-        volatility: 0.50,
-        minSwing: -0.40, // oscila entre -40% e +55% (média +7,5%)
-        maxSwing: 0.55,
-        desc: 'Apostando nas empresas inovadoras do futuro com potencial de retorno astronômico.'
-      }
+{
+  id: 'poupanca',
+  name: 'Poupança Bancária',
+  icon: '🏦',
+  risk: 'Muito Baixo',
+  baseYield: 0.005,
+  volatility: 0,
+  minSwing: -0.002,
+  maxSwing: 0.004,
+  termMonths: 0,
+  desc: 'Reserva de emergência e liquidez imediata.'
+},
+{
+  id: 'renda_fixa',
+  name: 'Renda Fixa / Tesouro Direto',
+  icon: '🏛️',
+  risk: 'Baixo',
+  baseYield: 0.008,
+  volatility: 0.002,
+  minSwing: -0.005,
+  maxSwing: 0.008,
+  termMonths: 1,
+  desc: 'Títulos e CDBs com retorno mais previsível.'
+},
+{
+  id: 'cdb',
+  name: 'CDB de Bancos',
+  icon: '💳',
+  risk: 'Baixo',
+  baseYield: 0.009,
+  volatility: 0.002,
+  minSwing: -0.006,
+  maxSwing: 0.01,
+  termMonths: 1,
+  desc: 'Renda fixa com diferentes níveis de liquidez.'
+},
+{
+  id: 'fiis',
+  name: 'Fundos Imobiliários (FIIs)',
+  icon: '🏢',
+  risk: 'Moderado',
+  baseYield: 0.008,
+  volatility: 0.03,
+  minSwing: -0.04,
+  maxSwing: 0.05,
+  termMonths: 1,
+  desc: 'Fundos ligados ao mercado imobiliário com oscilações.'
+},
+{
+  id: 'etf',
+  name: 'ETFs de Índices',
+  icon: '📊',
+  risk: 'Moderado',
+  baseYield: 0.004,
+  volatility: 0.05,
+  minSwing: -0.07,
+  maxSwing: 0.08,
+  termMonths: 3,
+  desc: 'Carteira diversificada que acompanha índices de mercado.'
+},
+{
+  id: 'acoes',
+  name: 'Ações de Empresas',
+  icon: '📈',
+  risk: 'Médio / Alto',
+  baseYield: 0.004,
+  volatility: 0.1,
+  minSwing: -0.12,
+  maxSwing: 0.15,
+  termMonths: 3,
+  desc: 'Participação em empresas com maior potencial e volatilidade.'
+},
+{
+  id: 'debentures',
+  name: 'Debêntures',
+  icon: '🏗️',
+  risk: 'Médio / Alto',
+  baseYield: 0.011,
+  volatility: 0.03,
+  minSwing: -0.04,
+  maxSwing: 0.06,
+  termMonths: 2,
+  desc: 'Títulos privados com maior retorno e risco de crédito.'
+},
+{
+  id: 'cripto',
+  name: 'Criptomoedas',
+  icon: '🪙',
+  risk: 'Alto',
+  baseYield: 0,
+  volatility: 0.35,
+  minSwing: -0.3,
+  maxSwing: 0.38,
+  termMonths: 0,
+  desc: 'Ativos digitais com forte volatilidade.'
+},
+{
+  id: 'startups',
+  name: 'Venture Capital & Startups Anjo',
+  icon: '🚀',
+  risk: 'Muito Alto',
+  baseYield: 0,
+  volatility: 0.5,
+  minSwing: -0.4,
+  maxSwing: 0.55,
+  termMonths: 12,
+  desc: 'Participação de alto risco e baixa liquidez em empresas novas.'
+},
     ];
 
     const BUSINESSES_DATA = [
@@ -2135,11 +2359,12 @@
     ];
 
     const FOOD_DATA = [
-      { id: 'marmita', name: 'Marmita / Sanduíche Simples', price: 15, hungerGain: 25, happinessGain: 2, icon: '🥪', desc: 'Refeição rápida e barata para não passar o dia com fome.' },
-      { id: 'prato_feito', name: 'Prato Feito (PF) Completo', price: 35, hungerGain: 50, happinessGain: 5, icon: '🍛', desc: 'Arroz, feijão, bife suculento, batata frita e salada.' },
-      { id: 'rodizio', name: 'Rodízio de Carnes Nobres', price: 150, hungerGain: 80, happinessGain: 12, icon: '🥩', desc: 'Picanha fatiada, buffet completo e sobremesa inclusa.' },
-      { id: 'michelin', name: 'Jantar em Restaurante Estrela Michelin', price: 1200, hungerGain: 100, happinessGain: 25, icon: '🍷', desc: 'Menu degustação em 9 passos harmonizado com vinhos raros.' },
-      { id: 'banquete', name: 'Banquete Privado com Chef Pessoal', price: 8000, hungerGain: 100, happinessGain: 40, icon: '🦞', desc: 'Caviar, lagostas frescas e alta gastronomia servida na sua mesa.' }
+      { id: 'marmita', name: 'Marmita / Sanduíche Simples', price: 18, hungerGain: 25, energyGain: 8, healthGain: 1, happinessGain: 2, icon: '🥪', desc: 'Refeição rápida e barata para recuperar disposição.' },
+      { id: 'prato_feito', name: 'Prato Feito (PF) Completo', price: 35, hungerGain: 50, energyGain: 15, healthGain: 2, happinessGain: 5, icon: '🍛', desc: 'Refeição completa para sustentar um dia de trabalho.' },
+      { id: 'executivo', name: 'Almoço Executivo', price: 65, hungerGain: 65, energyGain: 18, healthGain: 3, happinessGain: 6, icon: '🍲', desc: 'Refeição mais completa, com melhor recuperação.' },
+      { id: 'rodizio', name: 'Rodízio de Carnes Nobres', price: 150, hungerGain: 80, energyGain: 22, healthGain: 4, happinessGain: 12, icon: '🥩', desc: 'Experiência gastronômica para recuperar fome e disposição.' },
+      { id: 'michelin', name: 'Jantar em Restaurante de Alta Gastronomia', price: 650, hungerGain: 100, energyGain: 25, healthGain: 4, happinessGain: 25, icon: '🍽️', desc: 'Jantar especial com alto custo e grande benefício de bem-estar.' },
+      { id: 'banquete', name: 'Banquete Privado com Chef Pessoal', price: 3500, hungerGain: 100, energyGain: 30, healthGain: 5, happinessGain: 40, icon: '🦞', desc: 'Alta gastronomia para quem já alcançou grande patrimônio.' }
     ];
 
     const LEISURE_DATA = [
@@ -2154,49 +2379,137 @@
     ];
 
     const OBJECTIVES_DATA = [
-      // Phase 1 (Do Zero ao Milhão)
-      { id: 'obj_job', title: 'Conseguir o primeiro emprego', check: (s) => s.job !== 'desempregado', rewardText: '+R$ 200 de bônus', rewardFn: (s) => { s.cash += 200; } },
+      { id: 'obj_job', title: 'Conseguir o primeiro emprego', check: (s) => s.job !== 'desempregado', rewardText: '+R$ 300 de bônus', rewardFn: (s) => { s.cash += 300; } },
       { id: 'obj_save1k', title: 'Economizar os primeiros R$ 1.000', check: (s) => s.cash >= 1000, rewardText: '+5 Felicidade', rewardFn: (s) => { s.happiness = Math.min(100, s.happiness + 5); } },
-      { id: 'obj_buy_vehicle', title: 'Comprar o primeiro meio de transporte (Bicicleta ou Moto)', check: (s) => s.vehicle !== 'a_pe', rewardText: '+5 Reputação', rewardFn: (s) => { s.reputation += 5; } },
-      { id: 'obj_buy_house', title: 'Comprar o primeiro imóvel próprio (Kitnet ou melhor)', check: (s) => s.house !== 'rua' && s.house !== 'quarto_alugado', rewardText: '+10 Reputação', rewardFn: (s) => { s.reputation += 10; } },
+      { id: 'obj_buy_vehicle', title: 'Comprar o primeiro meio de transporte', check: (s) => s.vehicle !== 'a_pe', rewardText: '+5 Reputação', rewardFn: (s) => { s.reputation += 5; } },
+      { id: 'obj_buy_house', title: 'Comprar o primeiro imóvel próprio', check: (s) => s.house !== 'rua' && s.house !== 'quarto_alugado', rewardText: '+10 Reputação', rewardFn: (s) => { s.reputation += 10; } },
       { id: 'obj_invest', title: 'Fazer o primeiro investimento financeiro', check: (s) => Object.values(s.investments).some(v => v > 0), rewardText: '+R$ 500 de bônus', rewardFn: (s) => { s.cash += 500; } },
+      { id: 'obj_salary5k', title: 'Alcançar salário de R$ 5.000/mês', check: (s) => { const j=JOBS_DATA.find(x=>x.id===s.job); return j && j.monthlySalary >= 5000; }, rewardText: '+10 Reputação', rewardFn: (s) => { s.reputation += 10; } },
+      { id: 'obj_salary10k', title: 'Alcançar salário de R$ 10.000/mês', check: (s) => { const j=JOBS_DATA.find(x=>x.id===s.job); return j && j.monthlySalary >= 10000; }, rewardText: '+15 Reputação', rewardFn: (s) => { s.reputation += 15; } },
+      { id: 'obj_salary50k', title: 'Alcançar salário de R$ 50.000/mês', check: (s) => { const j=JOBS_DATA.find(x=>x.id===s.job); return j && j.monthlySalary >= 50000; }, rewardText: '+25 Reputação', rewardFn: (s) => { s.reputation += 25; } },
       { id: 'obj_save100k', title: 'Alcançar R$ 100.000 de Patrimônio', check: (s) => s.netWorth >= 100000, rewardText: '+15 Reputação', rewardFn: (s) => { s.reputation += 15; } },
       { id: 'obj_open_biz', title: 'Abrir seu primeiro negócio próprio', check: (s) => Object.values(s.businesses).some(b => b.owned), rewardText: '+10 Felicidade', rewardFn: (s) => { s.happiness = Math.min(100, s.happiness + 10); } },
-      { id: 'obj_reach_1m', title: 'Chegar ao PRIMEIRO MILHÃO (R$ 1.000.000)!', check: (s) => s.netWorth >= 1000000, rewardText: '👑 Desbloqueia Modo Milionário!', rewardFn: (s) => {} },
+      { id: 'obj_500k', title: 'Construir R$ 500.000 de Patrimônio', check: (s) => s.netWorth >= 500000, rewardText: '+20 Reputação', rewardFn: (s) => { s.reputation += 20; } },
+      { id: 'obj_1m', title: 'Chegar ao PRIMEIRO MILHÃO', check: (s) => s.netWorth >= 1000000, rewardText: '👑 Desbloqueia Modo Milionário!', rewardFn: (s) => {} },
+      { id: 'obj_10m', title: 'Alcançar R$ 10 Milhões de Patrimônio', check: (s) => s.netWorth >= 10000000, rewardText: '+30 Reputação', rewardFn: (s) => { s.reputation += 30; } },
+      { id: 'obj_100m', title: 'Alcançar R$ 100 Milhões de Patrimônio', check: (s) => s.netWorth >= 100000000, rewardText: '+50 Reputação', rewardFn: (s) => { s.reputation += 50; } },
+      { id: 'obj_1b', title: 'Tornar-se um Bilionário', check: (s) => s.netWorth >= 1000000000, rewardText: '🏆 Título: Magnata do Mundo', rewardFn: (s) => {} },
+      { id: 'obj_education50', title: 'Chegar a 50 pontos de Educação', check: (s) => s.education >= 50, rewardText: '+10 Reputação', rewardFn: (s) => { s.reputation += 10; } },
+      { id: 'obj_education100', title: 'Alcançar 100 pontos de Educação', check: (s) => s.education >= 100, rewardText: '+25 Reputação', rewardFn: (s) => { s.reputation += 25; } },
+      { id: 'obj_5biz', title: 'Possuir 5 empresas ativas', check: (s) => Object.values(s.businesses).filter(b => b.owned).length >= 5, rewardText: '+30 Reputação', rewardFn: (s) => { s.reputation += 30; } },
+      { id: 'obj_invest100k', title: 'Ter R$ 100.000 investidos', check: (s) => Object.values(s.investments).reduce((a,b)=>a+b,0) >= 100000, rewardText: '+20 Reputação', rewardFn: (s) => { s.reputation += 20; } },
+      { id: 'obj_car_luxury', title: 'Comprar um veículo de luxo', check: (s) => ['luxo','esportivo','supercarro'].includes(s.vehicle), rewardText: '+15 Felicidade', rewardFn: (s) => { s.happiness = Math.min(100, s.happiness + 15); } },
+      { id: 'obj_property_luxury', title: 'Comprar um imóvel de alto padrão', check: (s) => ['cobertura_media','mansao','cobertura','mansao_alphaville','casa_praia','fazenda','ilha','palacio_futuro'].includes(s.house), rewardText: '+15 Felicidade', rewardFn: (s) => { s.happiness = Math.min(100, s.happiness + 15); } }
+    ];
 
-      // Phase 2 (Modo Milionário & Meu Império)
-      { id: 'obj_reach_10m', title: 'Alcançar R$ 10 Milhões de Patrimônio', isMil: true, check: (s) => s.netWorth >= 10000000, rewardText: '+25 Reputação', rewardFn: (s) => { s.reputation += 25; } },
-      { id: 'obj_mansao', title: 'Comprar uma Mansão Exclusiva ou Cobertura', isMil: true, check: (s) => ['mansao', 'cobertura', 'mansao_alphaville', 'casa_praia', 'fazenda', 'ilha', 'palacio_futuro'].includes(s.house), rewardText: '+15 Felicidade', rewardFn: (s) => { s.happiness = Math.min(100, s.happiness + 15); } },
-      { id: 'obj_5_biz', title: 'Possuir 5 ou mais empresas ativas simultaneamente', isMil: true, check: (s) => Object.values(s.businesses).filter(b => b.owned).length >= 5, rewardText: '+30 Reputação', rewardFn: (s) => { s.reputation += 30; } },
-      { id: 'obj_jet', title: 'Comprar um Jato Particular ou Helicóptero', isMil: true, check: (s) => ['helicoptero', 'jato', 'iate'].includes(s.vehicle), rewardText: '+20 Felicidade', rewardFn: (s) => { s.happiness = Math.min(100, s.happiness + 20); } },
-      { id: 'obj_reach_100m', title: 'Alcançar R$ 100 Milhões de Patrimônio', isMil: true, check: (s) => s.netWorth >= 100000000, rewardText: '+50 Reputação', rewardFn: (s) => { s.reputation += 50; } },
-      { id: 'obj_ilha', title: 'Comprar sua própria Ilha Particular no Caribe', isMil: true, check: (s) => ['ilha', 'palacio_futuro'].includes(s.house), rewardText: 'Felicidade Máxima!', rewardFn: (s) => { s.happiness = 100; } },
-      { id: 'obj_reach_1b', title: 'Tornar-se um BILIONÁRIO (R$ 1.000.000.000)!', isMil: true, check: (s) => s.netWorth >= 1000000000, rewardText: '🏆 Título: Magnata do Mundo', rewardFn: (s) => {} }
+
+    const COLLECTION_RARITIES = {
+      comum: { name: 'Comum', icon: '🟢', weight: 80, className: 'common' },
+      raro: { name: 'Raro', icon: '🔵', weight: 17, className: 'rare' },
+      mitico: { name: 'Mítico', icon: '🟣', weight: 2, className: 'mythic' },
+      lendario: { name: 'Lendário', icon: '🟡', weight: 1, className: 'legendary' }
+    };
+
+    // Estrutura modular: novos itens podem ser adicionados sem alterar o sistema.
+    const COLLECTIONS_DATA = [
+      // 🚗 CARROS
+      {id:'col_carro_popular',name:'Carro Popular',category:'carros',rarity:'lendario',description:'Um veículo simples e confiável, símbolo do começo da vida motorizada.',value:3500,icon:'🚗'},
+      {id:'col_carro_sedan',name:'Sedan Executivo',category:'carros',rarity:'lendario',description:'Conforto e praticidade para quem está avançando na carreira.',value:9000,icon:'🚘'},
+      {id:'col_carro_eletrico',name:'Elétrico Urbano',category:'carros',rarity:'lendario',description:'Tecnologia, eficiência e mobilidade sustentável.',value:18000,icon:'🔋'},
+      {id:'col_carro_esportivo',name:'Esportivo Moderno',category:'carros',rarity:'lendario',description:'Um esportivo que transforma qualquer garagem em atração.',value:65000,icon:'🏎️'},
+      {id:'col_ferrari_classica',name:'Ferrari Clássica',category:'carros',rarity:'lendario',description:'Um clássico automobilístico extremamente valorizado por colecionadores.',value:150000,icon:'🏎️'},
+      {id:'col_carro_corrida',name:'Carro de Corrida',category:'carros',rarity:'lendario',description:'Máquina preparada para velocidade e competição.',value:240000,icon:'🏁'},
+      {id:'col_carro_luxo',name:'Grand Tourer de Luxo',category:'carros',rarity:'lendario',description:'Engenharia sofisticada e exclusividade em quatro rodas.',value:600000,icon:'🚘'},
+      {id:'col_supercarro',name:'Supercarro Italiano',category:'carros',rarity:'lendario',description:'Desempenho excepcional reservado a poucos colecionadores.',value:1200000,icon:'🏎️'},
+      {id:'col_hypercarro',name:'Hipercarro',category:'carros',rarity:'lendario',description:'Uma obra-prima de engenharia produzida em escala extremamente limitada.',value:5000000,icon:'⚡'},
+      {id:'col_classico_raro',name:'Clássico de Leilão',category:'carros',rarity:'lendario',description:'Peça histórica disputada pelos maiores colecionadores do mundo.',value:8500000,icon:'🏆'},
+
+      // 🏺 ARTEFATOS
+      {id:'col_artefato_antigo',name:'Artefato Antigo',category:'artefatos',rarity:'comum',description:'Uma peça preservada de uma civilização distante.',value:2500,icon:'🏺'},
+      {id:'col_medalha_antiga',name:'Medalha Antiga',category:'artefatos',rarity:'comum',description:'Uma pequena lembrança de um período histórico.',value:5000,icon:'🥇'},
+      {id:'col_moeda_historica',name:'Moeda Histórica',category:'artefatos',rarity:'comum',description:'Uma moeda antiga encontrada em excelente estado.',value:8500,icon:'🪙'},
+      {id:'col_relíquia_historica',name:'Relíquia Histórica',category:'artefatos',rarity:'raro',description:'Uma peça ligada a um capítulo importante da história.',value:30000,icon:'🏺'},
+      {id:'col_artefato_arqueologico',name:'Artefato Arqueológico',category:'artefatos',rarity:'raro',description:'Uma descoberta arqueológica de grande interesse cultural.',value:75000,icon:'🗿'},
+      {id:'col_armadura',name:'Armadura Cerimonial',category:'artefatos',rarity:'raro',description:'Uma peça cerimonial cuidadosamente preservada.',value:120000,icon:'🛡️'},
+      {id:'col_reliquia_rara',name:'Relíquia Rara',category:'artefatos',rarity:'mitico',description:'Um objeto histórico extremamente difícil de encontrar.',value:350000,icon:'📜'},
+      {id:'col_corona',name:'Coroa Histórica',category:'artefatos',rarity:'mitico',description:'Uma peça simbólica de enorme valor histórico.',value:800000,icon:'👑'},
+      {id:'col_artefato_lendario',name:'Artefato Lendário',category:'artefatos',rarity:'lendario',description:'Uma descoberta que poderia mudar uma coleção de museu.',value:2500000,icon:'🏺'},
+      {id:'col_tesouro_antigo',name:'Tesouro de Civilização Perdida',category:'artefatos',rarity:'lendario',description:'Um conjunto lendário de peças cujo paradeiro era desconhecido.',value:7000000,icon:'💎'},
+
+      // 💎 JOIAS
+      {id:'col_anel',name:'Anel de Colecionador',category:'joias',rarity:'comum',description:'Uma joia elegante para iniciar uma coleção.',value:1800,icon:'💍'},
+      {id:'col_colar',name:'Colar Clássico',category:'joias',rarity:'comum',description:'Peça tradicional com acabamento refinado.',value:4500,icon:'📿'},
+      {id:'col_rubi',name:'Rubi Lapidado',category:'joias',rarity:'comum',description:'Uma pedra vermelha de belo brilho.',value:9000,icon:'❤️'},
+      {id:'col_safira',name:'Safira Azul',category:'joias',rarity:'raro',description:'Safira de tonalidade intensa e lapidação precisa.',value:35000,icon:'💙'},
+      {id:'col_esmeralda',name:'Esmeralda Imperial',category:'joias',rarity:'raro',description:'Esmeralda de cor profunda, disputada por colecionadores.',value:70000,icon:'💚'},
+      {id:'col_diamante',name:'Diamante de Coleção',category:'joias',rarity:'raro',description:'Diamante lapidado com alto padrão de pureza.',value:140000,icon:'💎'},
+      {id:'col_joia_historica',name:'Joia Histórica',category:'joias',rarity:'mitico',description:'Uma peça com origem documentada e importância histórica.',value:450000,icon:'👑'},
+      {id:'col_diamante_azul',name:'Diamante Azul Raro',category:'joias',rarity:'mitico',description:'Uma gema extraordinariamente rara e valorizada.',value:950000,icon:'💠'},
+      {id:'col_joia_lendaria',name:'Joia Lendária',category:'joias',rarity:'lendario',description:'Uma peça única, cercada de histórias e disputas entre colecionadores.',value:3000000,icon:'💎'},
+      {id:'col_coroa_gemas',name:'Coroa de Gemas',category:'joias',rarity:'lendario',description:'Uma joia monumental com pedras preciosas de valor extraordinário.',value:9000000,icon:'👑'},
+
+      // 🏆 TROFÉUS
+      {id:'col_trofeu_milhao',name:'Troféu do Primeiro Milhão',category:'trofeus',rarity:'raro',description:'Concedido a quem alcança seu primeiro milhão de patrimônio.',value:25000,icon:'🏆'},
+      {id:'col_trofeu_carreira',name:'Troféu de Carreira',category:'trofeus',rarity:'comum',description:'Reconhecimento por construir uma carreira consistente.',value:5000,icon:'💼'},
+      {id:'col_trofeu_riqueza',name:'Troféu da Riqueza',category:'trofeus',rarity:'raro',description:'Símbolo de uma grande evolução patrimonial.',value:40000,icon:'💰'},
+      {id:'col_trofeu_investimento',name:'Troféu do Investidor',category:'trofeus',rarity:'comum',description:'Premiação por entrar no mundo dos investimentos.',value:7000,icon:'📈'},
+      {id:'col_trofeu_educacao',name:'Troféu da Educação',category:'trofeus',rarity:'comum',description:'Reconhecimento por levar sua formação ao próximo nível.',value:7000,icon:'🎓'},
+      {id:'col_trofeu_patrimonio',name:'Troféu do Patrimônio',category:'trofeus',rarity:'raro',description:'Representa a construção de um patrimônio expressivo.',value:60000,icon:'🏛️'},
+      {id:'col_trofeu_especial',name:'Troféu de Objetivo Especial',category:'trofeus',rarity:'raro',description:'Concedido por superar uma meta particularmente importante.',value:50000,icon:'⭐'},
+      {id:'col_trofeu_mitico',name:'Troféu da Alta Performance',category:'trofeus',rarity:'mitico',description:'Reconhecimento reservado aos jogadores que chegam ao topo.',value:200000,icon:'🥇'},
+      {id:'col_trofeu_lendario',name:'Troféu Lendário',category:'trofeus',rarity:'lendario',description:'Um troféu reservado a feitos extraordinários.',value:1000000,icon:'🏆'},
+      {id:'col_trofeu_imperio',name:'Troféu do Império',category:'trofeus',rarity:'lendario',description:'Símbolo máximo da construção de um verdadeiro império.',value:5000000,icon:'👑'},
+
+      // 🖼️ QUADROS
+      {id:'col_mona_lisa',name:'Mona Lisa',category:'quadros',rarity:'lendario',description:'Obra-prima de Leonardo da Vinci, apresentada no jogo como uma peça artística de coleção.',value:10000000,icon:'🖼️',artist:'Leonardo da Vinci'},
+      {id:'col_noite_estrelada',name:'A Noite Estrelada',category:'quadros',rarity:'mitico',description:'Uma das obras mais reconhecidas de Vincent van Gogh.',value:2500000,icon:'🌌',artist:'Vincent van Gogh'},
+      {id:'col_grito',name:'O Grito',category:'quadros',rarity:'mitico',description:'Obra expressionista marcante de Edvard Munch.',value:1800000,icon:'🖼️',artist:'Edvard Munch'},
+      {id:'col_ultima_ceia',name:'A Última Ceia',category:'quadros',rarity:'lendario',description:'Representação de coleção inspirada na obra de Leonardo da Vinci.',value:8000000,icon:'🎨',artist:'Leonardo da Vinci'},
+      {id:'col_criacao_adao',name:'A Criação de Adão',category:'quadros',rarity:'lendario',description:'Obra icônica associada ao teto da Capela Sistina.',value:7000000,icon:'🎨',artist:'Michelangelo'},
+      {id:'col_venus',name:'O Nascimento de Vênus',category:'quadros',rarity:'raro',description:'Obra renascentista de Sandro Botticelli.',value:350000,icon:'🖼️',artist:'Sandro Botticelli'},
+      {id:'col_girassois',name:'Girassóis',category:'quadros',rarity:'raro',description:'Série de pinturas de Vincent van Gogh.',value:300000,icon:'🌻',artist:'Vincent van Gogh'},
+      {id:'col_persistence',name:'A Persistência da Memória',category:'quadros',rarity:'raro',description:'Obra surrealista de Salvador Dalí.',value:400000,icon:'🕰️',artist:'Salvador Dalí'},
+      {id:'col_moça_brincos',name:'Moça com Brinco de Pérola',category:'quadros',rarity:'raro',description:'Pintura célebre de Johannes Vermeer.',value:450000,icon:'🖼️',artist:'Johannes Vermeer'},
+      {id:'col_autorretrato',name:'Autorretrato de Coleção',category:'quadros',rarity:'comum',description:'Uma obra de retrato de grande interesse artístico.',value:8000,icon:'🎨',artist:'Coleção LifeRPG'}
     ];
 
     const ACHIEVEMENTS_DATA = [
       { id: 'ach_primeiro_passo', name: 'O Começo de Tudo', icon: '🎒', desc: 'Começar sua jornada com R$ 100 e um sonho.' },
       { id: 'ach_primeiro_emprego', name: 'Primeiro Emprego', icon: '💼', desc: 'Conquistar seu primeiro trabalho assinado.' },
-      { id: 'ach_primeiros_1k', name: 'Primeiros R$ 1.000', icon: '💵', desc: 'Juntar seus primeiros quatro dígitos em dinheiro.' },
-      { id: 'ach_primeiros_10k', name: 'Pé de Meia (R$ 10.000)', icon: '💰', desc: 'Alcançar R$ 10.000 de patrimônio acumulado.' },
-      { id: 'ach_teto_proprio', name: 'Teto Próprio', icon: '🏠', desc: 'Comprar seu primeiro imóvel próprio e dar adeus ao aluguel.' },
+      { id: 'ach_primeiros_1k', name: 'Primeiros R$ 1.000', icon: '💵', desc: 'Juntar os primeiros quatro dígitos em dinheiro.' },
+      { id: 'ach_primeiros_10k', name: 'Pé de Meia', icon: '💰', desc: 'Alcançar R$ 10.000 de patrimônio.' },
+      { id: 'ach_teto_proprio', name: 'Teto Próprio', icon: '🏠', desc: 'Comprar seu primeiro imóvel próprio.' },
       { id: 'ach_motorizado', name: 'Motorizado', icon: '🚗', desc: 'Comprar seu primeiro meio de transporte.' },
-      { id: 'ach_investidor', name: 'Lobo de Wall Street', icon: '📈', desc: 'Realizar sua primeira aplicação financeira.' },
-      { id: 'ach_empreendedor', name: 'Empreendedor Nato', icon: '🏬', desc: 'Fundar ou comprar seu primeiro negócio próprio.' },
-      { id: 'ach_edu_50', name: 'Mente Brilhante', icon: '🎓', desc: 'Atingir 50 pontos de Educação através dos estudos.' },
-      { id: 'ach_100k', name: 'Rumo ao Topo (R$ 100.000)', icon: '🥈', desc: 'Acumular R$ 100.000 de patrimônio líquido.' },
-      { id: 'ach_500k', name: 'Meio Caminho Andado (R$ 500k)', icon: '🥇', desc: 'Bater meio milhão de reais em patrimônio.' },
-      { id: 'ach_milionario', name: 'O PRIMEIRO MILHÃO 💎', icon: '👑', desc: 'Alcançar oficialmente a marca histórica de R$ 1.000.000!' },
-      { id: 'ach_supercarro', name: 'Garagem dos Sonhos', icon: '🏎️', desc: 'Adquirir um Carro Esportivo ou Supercarro.' },
-      { id: 'ach_mansao', name: 'Vivendo como Nobreza', icon: '🏰', desc: 'Comprar uma Mansão de alto padrão.' },
-      { id: 'ach_10m', name: 'Multi-Milionário (R$ 10M)', icon: '💎', desc: 'Atingir R$ 10.000.000 de patrimônio total.' },
-      { id: 'ach_conglomerado', name: 'Dono de 5 Empresas', icon: '🌐', desc: 'Possuir 5 ou mais negócios ativos ao mesmo tempo.' },
-      { id: 'ach_ceu', name: 'Dono dos Céus', icon: '✈️', desc: 'Adquirir um Helicóptero ou Jato Particular.' },
-      { id: 'ach_edu_100', name: 'Doutor da Vida (100 Edu)', icon: '🔬', desc: 'Alcançar a pontuação máxima de 100 em Educação.' },
-      { id: 'ach_rep_100', name: 'Lenda Viva (100 Rep)', icon: '⭐', desc: 'Atingir o nível máximo de 100 em Reputação.' },
-      { id: 'ach_ilha', name: 'Rei do Próprio Reino', icon: '🏝️', desc: 'Comprar sua própria Ilha Particular.' },
-      { id: 'ach_100m', name: 'Centi-Milionário (R$ 100M)', icon: '🪐', desc: 'Romper a barreira dos R$ 100.000.000 de patrimônio.' },
-      { id: 'ach_bilionario', name: 'BILIONÁRIO GLOBAL', icon: '🌌', desc: 'Alcançar a lendária marca de R$ 1.000.000.000!' }
+      { id: 'ach_investidor', name: 'Primeiro Investidor', icon: '📈', desc: 'Realizar sua primeira aplicação financeira.' },
+      { id: 'ach_empreendedor', name: 'Empreendedor Nato', icon: '🏬', desc: 'Fundar ou comprar seu primeiro negócio.' },
+      { id: 'ach_edu_50', name: 'Mente Brilhante', icon: '🎓', desc: 'Atingir 50 pontos de Educação.' },
+      { id: 'ach_salary10k', name: 'Salário de Respeito', icon: '💼', desc: 'Alcançar uma carreira que pague R$ 10.000/mês ou mais.' },
+      { id: 'ach_salary20k', name: 'Alta Renda', icon: '📈', desc: 'Alcançar R$ 20.000/mês de salário.' },
+      { id: 'ach_salary50k', name: 'Executivo de Elite', icon: '🏢', desc: 'Alcançar R$ 50.000/mês de salário.' },
+      { id: 'ach_salary100k', name: 'Renda Extraordinária', icon: '👑', desc: 'Alcançar R$ 100.000/mês de salário.' },
+      { id: 'ach_salary200k', name: 'Topo Corporativo', icon: '💎', desc: 'Alcançar R$ 200.000/mês de salário.' },
+      { id: 'ach_100k', name: 'Rumo ao Topo', icon: '🥈', desc: 'Acumular R$ 100.000 de patrimônio.' },
+      { id: 'ach_500k', name: 'Meio Milhão', icon: '🥇', desc: 'Bater R$ 500.000 de patrimônio.' },
+      { id: 'ach_milionario', name: 'O PRIMEIRO MILHÃO', icon: '👑', desc: 'Alcançar R$ 1.000.000 de patrimônio.' },
+      { id: 'ach_supercarro', name: 'Garagem dos Sonhos', icon: '🏎️', desc: 'Adquirir um esportivo ou supercarro.' },
+      { id: 'ach_mansao', name: 'Vivendo como Nobreza', icon: '🏰', desc: 'Comprar uma mansão ou cobertura de alto padrão.' },
+      { id: 'ach_10m', name: 'Multi-Milionário', icon: '💎', desc: 'Atingir R$ 10.000.000 de patrimônio.' },
+      { id: 'ach_conglomerado', name: 'Dono de 5 Empresas', icon: '🌐', desc: 'Possuir 5 ou mais negócios ativos.' },
+      { id: 'ach_ceu', name: 'Dono dos Céus', icon: '✈️', desc: 'Adquirir um helicóptero ou jato.' },
+      { id: 'ach_edu_100', name: 'Doutor da Vida', icon: '🔬', desc: 'Alcançar 100 pontos de Educação.' },
+      { id: 'ach_rep_100', name: 'Lenda Viva', icon: '⭐', desc: 'Atingir 100 de Reputação.' },
+      { id: 'ach_100k_inv', name: 'Carteira de Seis Dígitos', icon: '📊', desc: 'Manter R$ 100.000 ou mais investidos.' },
+      { id: 'ach_ilha', name: 'Rei do Próprio Reino', icon: '🏝️', desc: 'Comprar uma ilha particular.' },
+      { id: 'ach_100m', name: 'Centi-Milionário', icon: '🪐', desc: 'Romper R$ 100.000.000 de patrimônio.' },
+      { id: 'ach_bilionario', name: 'BILIONÁRIO GLOBAL', icon: '🌌', desc: 'Alcançar R$ 1.000.000.000 de patrimônio.' },
+      { id: 'ach_colec_primeiro', name: 'Primeira Descoberta', icon: '🗃️', desc: 'Encontrar seu primeiro item colecionável.' },
+      { id: 'ach_colec_10', name: 'Colecionador Iniciante', icon: '🔎', desc: 'Descobrir 10 itens diferentes.' },
+      { id: 'ach_colec_50', name: 'Colecionador Dedicado', icon: '🧳', desc: 'Descobrir 50 itens diferentes.' },
+      { id: 'ach_colec_categoria', name: 'Categoria Completa', icon: '📚', desc: 'Descobrir todos os itens de uma categoria.' },
+      { id: 'ach_colec_mitico', name: 'Encontro Mítico', icon: '🟣', desc: 'Encontrar um item mítico.' },
+      { id: 'ach_colec_lendario', name: 'Lenda da Coleção', icon: '🟡', desc: 'Encontrar um item lendário.' },
+      { id: 'ach_colec_valor', name: 'Acervo Valioso', icon: '💎', desc: 'Manter R$ 1 milhão em valor de coleções.' },
+      { id: 'ach_colec_100', name: 'Coleção Completa', icon: '🏛️', desc: 'Descobrir 100% dos itens disponíveis.' },
     ];
 
     const RANDOM_EVENTS = [
@@ -2439,6 +2752,8 @@
         happiness: 70,
         energy: 100,
         hunger: 85,
+        health: 100,
+        sleepDebt: 0,
         education: 0,
         reputation: 0,
         job: 'desempregado',
@@ -2447,15 +2762,27 @@
         investments: {
           poupanca: 0,
           renda_fixa: 0,
+          cdb: 0,
           fiis: 0,
+          etf: 0,
           acoes: 0,
+          debentures: 0,
           cripto: 0,
           startups: 0
+        },
+        investmentMonthsHeld: {
+          poupanca: 0, renda_fixa: 0, cdb: 0, fiis: 0, etf: 0,
+          acoes: 0, debentures: 0, cripto: 0, startups: 0
         },
         businesses: {}, // { bizId: { owned: bool, level: int } }
         completedObjectives: [],
         completedCourses: [], // cursos já concluídos (cada curso só pode ser feito uma vez)
         unlockedAchievements: {}, // { achId: timestampString }
+        collections: {}, // itens atualmente mantidos: { itemId: true }
+        collectionHistory: {}, // itens já descobertos alguma vez: { itemId: timestampString }
+        collectionDrops: 0,
+        collectionSold: 0,
+        collectionLastDrop: null,
         isMillionaire: false,
         celebrationShown: false,
         stats: {
@@ -2466,7 +2793,10 @@
           totalInvestRev: 0,
           totalDays: 1,
           totalMonths: 0,
-          totalTrips: 0
+          totalTrips: 0,
+          totalCareerDays: 0,
+          totalFoodSpent: 0,
+          totalRestActions: 0
         }
       },
 
@@ -2507,7 +2837,15 @@
             const merged = Object.assign({}, base, data);
             merged.stats = Object.assign({}, base.stats, data.stats);
             merged.investments = Object.assign({}, base.investments, data.investments);
+            merged.investmentMonthsHeld = Object.assign({}, base.investmentMonthsHeld, data.investmentMonthsHeld || {});
+            merged.collections = Object.assign({}, base.collections, data.collections || {});
+            merged.collectionHistory = Object.assign({}, base.collectionHistory, data.collectionHistory || {});
+            if (typeof merged.collectionDrops !== 'number') merged.collectionDrops = 0;
+            if (typeof merged.collectionSold !== 'number') merged.collectionSold = 0;
+            if (!Array.isArray(merged.collectionLastDrop) && merged.collectionLastDrop !== null) merged.collectionLastDrop = null;
             if (!Array.isArray(merged.completedCourses)) merged.completedCourses = [];
+            if (typeof merged.health !== 'number') merged.health = 100;
+            if (typeof merged.sleepDebt !== 'number') merged.sleepDebt = 0;
             this.state = merged;
           }
         } catch (e) {
@@ -2576,14 +2914,35 @@
           this.state.day++;
           this.state.stats.totalDays++;
 
-          // Natural daily decay
+          // Necessidades básicas: alimentação e sono agora têm impacto real.
           this.state.hunger = Math.max(0, this.state.hunger - 15);
-          if (this.state.hunger < 20) {
-            this.state.energy = Math.max(0, this.state.energy - 10);
+          this.state.sleepDebt = Math.min(100, this.state.sleepDebt + 15);
+
+          // Fome e privação de sono afetam saúde e energia.
+          if (this.state.hunger <= 10) {
+            this.state.energy = Math.max(0, this.state.energy - 12);
+            this.state.happiness = Math.max(0, this.state.happiness - 3);
+            this.state.health = Math.max(1, this.state.health - 6);
+          } else if (this.state.hunger < 25) {
+            this.state.energy = Math.max(0, this.state.energy - 6);
             this.state.happiness = Math.max(0, this.state.happiness - 2);
+            this.state.health = Math.max(1, this.state.health - 2);
           }
 
-          // Happiness slight decay
+          if (this.state.sleepDebt >= 85) {
+            this.state.energy = Math.max(0, this.state.energy - 10);
+            this.state.happiness = Math.max(0, this.state.happiness - 3);
+            this.state.health = Math.max(1, this.state.health - 5);
+          } else if (this.state.sleepDebt >= 60) {
+            this.state.energy = Math.max(0, this.state.energy - 5);
+            this.state.health = Math.max(1, this.state.health - 2);
+          }
+
+          if (this.state.energy <= 10) {
+            this.state.health = Math.max(1, this.state.health - 2);
+          }
+
+          // Happiness slight decay.
           if (this.state.stats.totalDays % 3 === 0) {
             this.state.happiness = Math.max(10, this.state.happiness - 1);
           }
@@ -2593,11 +2952,22 @@
             this.triggerRandomEvent();
           }
 
+          // Pequena oportunidade de descoberta a cada dia; eventos podem aumentar a chance.
+          this.tryCollectionDrop('jornada');
+
           // End of Month trigger (30 days per month)
           if (this.state.day > 30) {
             this.state.day = 1;
             this.state.month++;
             this.state.stats.totalMonths++;
+
+            // Investment holding time advances once per month.
+            for (const invId of Object.keys(this.state.investments)) {
+              if ((this.state.investments[invId] || 0) > 0) {
+                this.state.investmentMonthsHeld[invId] = (this.state.investmentMonthsHeld[invId] || 0) + 1;
+              }
+            }
+
             if (this.state.month > 12) {
               this.state.month = 1;
               this.state.year++;
@@ -2735,27 +3105,45 @@
         const jobMeta = JOBS_DATA.find(j => j.id === this.state.job);
         if (!jobMeta) return;
 
-        if (this.state.energy < jobMeta.energyCost) {
-          UI.notify('Exausto demais!', 'Sua energia está muito baixa para trabalhar. Vá dormir para descansar!', 'danger', '⚡');
+        if (this.state.health <= 15) {
+          UI.notify('Vida muito baixa!', 'Cuide da sua alimentação e do seu sono antes de trabalhar novamente.', 'danger', '❤️');
           AudioEngine.buzzer();
           return;
         }
 
-        // Work day!
+        if (this.state.hunger <= 8) {
+          UI.notify('Você está com muita fome!', 'Faça uma refeição antes de assumir outro turno.', 'warning', '🍔');
+          AudioEngine.buzzer();
+          return;
+        }
+
+        if (this.state.sleepDebt >= 90) {
+          UI.notify('Privação de sono!', 'Você precisa dormir antes de continuar trabalhando.', 'danger', '💤');
+          AudioEngine.buzzer();
+          return;
+        }
+
+        if (this.state.energy < jobMeta.energyCost) {
+          UI.notify('Exausto demais!', 'Sua energia está muito baixa para trabalhar. Vá dormir ou descansar!', 'danger', '⚡');
+          AudioEngine.buzzer();
+          return;
+        }
+
         this.state.energy = Math.max(0, this.state.energy - jobMeta.energyCost);
         this.state.hunger = Math.max(0, this.state.hunger - jobMeta.hungerCost);
-        
+
         let salaryGain = jobMeta.salary;
-        // Happiness bonus/penalty modifier
         if (this.state.happiness >= 80) {
-          salaryGain = Math.floor(salaryGain * 1.15); // +15% productivity bonus
+          salaryGain = Math.floor(salaryGain * 1.10);
         } else if (this.state.happiness <= 25) {
-          salaryGain = Math.floor(salaryGain * 0.85); // -15% depression penalty
+          salaryGain = Math.floor(salaryGain * 0.85);
         }
 
         this.state.cash += salaryGain;
         this.state.stats.totalEarnedWork += salaryGain;
         this.state.stats.shiftsWorked++;
+        this.state.stats.totalCareerDays++;
+
         if (salaryGain > this.state.stats.highestSalary) {
           this.state.stats.highestSalary = salaryGain;
         }
@@ -2768,15 +3156,31 @@
       sleep() {
         AudioEngine.sleep();
         this.state.energy = 100;
-        
-        // Better housing gives happiness bonus on waking up
+        this.state.sleepDebt = Math.max(0, this.state.sleepDebt - 85);
+        this.state.health = Math.min(100, this.state.health + 8);
+
         const houseMeta = HOUSING_DATA.find(h => h.id === this.state.house);
         if (houseMeta && houseMeta.happinessBonus > 0) {
           this.state.happiness = Math.min(100, this.state.happiness + Math.min(5, houseMeta.happinessBonus));
         }
 
-        UI.notify('Noite revigorante!', 'Energia recarregada para 100%. Mais um dia se inicia!', 'success', '💤');
+        UI.notify('Noite revigorante!', 'Energia recuperada, sono em dia e sua vida recebeu uma recuperação.', 'success', '💤');
         this.advanceTime(1);
+      },
+
+      rest() {
+        if (this.state.energy >= 90) {
+          UI.notify('Você já está descansado!', 'Use o tempo para estudar, trabalhar ou cuidar de outras necessidades.', 'warning', '🧘');
+          return;
+        }
+
+        this.state.energy = Math.min(100, this.state.energy + 25);
+        this.state.health = Math.min(100, this.state.health + 2);
+        this.state.happiness = Math.min(100, this.state.happiness + 1);
+        this.state.stats.totalRestActions++;
+        UI.notify('Pausa realizada', '+25 Energia e +2 Vida. Você não avançou o dia.', 'success', '🧘');
+        this.recalculateNetWorth();
+        UI.renderAll();
       },
 
       quickEat() {
@@ -2801,9 +3205,13 @@
 
         this.state.cash -= food.price;
         this.state.hunger = Math.min(100, this.state.hunger + food.hungerGain);
+        this.state.energy = Math.min(100, this.state.energy + (food.energyGain || 0));
+        this.state.health = Math.min(100, this.state.health + (food.healthGain || 0));
         this.state.happiness = Math.min(100, this.state.happiness + food.happinessGain);
+        this.state.stats.totalFoodSpent += food.price;
+
         AudioEngine.coin();
-        UI.notify('Refeição deliciosa!', `${food.name} saboreado com sucesso (+${food.hungerGain}% Saciedade).`, 'success', food.icon);
+        UI.notify('Refeição deliciosa!', `${food.name} (+${food.hungerGain}% Saciedade${food.energyGain ? ` • +${food.energyGain} Energia` : ''}).`, 'success', food.icon);
         this.recalculateNetWorth();
         UI.renderAll();
       },
@@ -2819,6 +3227,12 @@
 
         if (this.state.completedCourses.includes(courseId)) {
           UI.notify('Curso já concluído!', 'Você já fez este curso. Escolha outro para continuar evoluindo.', 'warning', '✅');
+          AudioEngine.buzzer();
+          return;
+        }
+
+        if (this.state.education < (course.reqEdu || 0)) {
+          UI.notify('Pré-requisito acadêmico!', `Este curso exige pelo menos ${course.reqEdu} pontos de Educação.`, 'warning', '📚');
           AudioEngine.buzzer();
           return;
         }
@@ -2839,9 +3253,8 @@
         this.state.completedCourses.push(courseId);
         this.state.energy = Math.max(0, this.state.energy - course.energyCost);
         this.state.education = Math.min(100, this.state.education + course.eduGain);
-        if (course.repGain) {
-          this.state.reputation += course.repGain;
-        }
+
+        if (course.repGain) this.state.reputation += course.repGain;
 
         AudioEngine.levelUp();
         UI.createFloatingText(`+${course.eduGain} Educação`, '#a855f7');
@@ -2878,14 +3291,35 @@
         if (!job) return;
 
         if (this.state.education < job.reqEdu) {
-          UI.notify('Qualificação Insuficiente!', `Este cargo exige pelo menos ${job.reqEdu} pontos de Educação. Vá estudar!`, 'warning', '📚');
+          UI.notify('Qualificação Insuficiente!', `Este cargo exige pelo menos ${job.reqEdu} pontos de Educação.`, 'warning', '📚');
+          AudioEngine.buzzer();
+          return;
+        }
+
+        if ((this.state.stats.totalCareerDays || this.state.stats.shiftsWorked) < (job.reqShifts || 0)) {
+          UI.notify('Experiência Insuficiente!', `Este cargo exige ${job.reqShifts} dias de carreira. Você tem ${this.state.stats.totalCareerDays || this.state.stats.shiftsWorked}.`, 'warning', '⏳');
           AudioEngine.buzzer();
           return;
         }
 
         this.state.job = jobId;
         AudioEngine.levelUp();
-        UI.notify('Contratado!', `Você agora é ${job.name}. Salário: ${Formatter.money(job.salary)} por dia!`, 'success', job.icon);
+        UI.notify('Contratado!', `Você agora é ${job.name}. Salário de aproximadamente ${Formatter.money(job.monthlySalary)}/mês.`, 'success', job.icon);
+        this.recalculateNetWorth();
+        UI.renderAll();
+      },
+
+      sellHouse() {
+        const current = HOUSING_DATA.find(h => h.id === this.state.house);
+        if (!current || current.isRent || current.price <= 0) {
+          UI.notify('Nenhum imóvel para vender', 'Você não possui um imóvel próprio para colocar à venda.', 'warning', '🏠');
+          return;
+        }
+
+        const saleValue = Math.floor(current.price * 0.90);
+        this.state.cash += saleValue;
+        this.state.house = 'rua';
+        UI.notify('Imóvel vendido!', `${current.name} foi vendido por ${Formatter.money(saleValue)} (90% do valor de referência).`, 'success', '🏠');
         this.recalculateNetWorth();
         UI.renderAll();
       },
@@ -2900,11 +3334,11 @@
         }
 
         if (house.isRent) {
-          // Se morava em imóvel próprio, vende antes de se mudar (senão o patrimônio sumiria)
           const ownedHouse = HOUSING_DATA.find(h => h.id === this.state.house);
           if (ownedHouse && !ownedHouse.isRent && ownedHouse.price > 0) {
-            this.state.cash += ownedHouse.price;
-            UI.notify('Imóvel anterior vendido', `Você recuperou ${Formatter.money(ownedHouse.price)} da sua antiga moradia.`, 'gold');
+            const resale = Math.floor(ownedHouse.price * 0.90);
+            this.state.cash += resale;
+            UI.notify('Imóvel anterior vendido', `Você recuperou ${Formatter.money(resale)} da venda do imóvel anterior.`, 'gold');
           }
           this.state.house = houseId;
           AudioEngine.click();
@@ -2914,25 +3348,39 @@
           return;
         }
 
-        // Buying property
         if (this.state.cash < house.price) {
           UI.notify('Saldo insuficiente!', `Você precisa de ${Formatter.money(house.price)} para comprar este imóvel.`, 'warning');
           AudioEngine.buzzer();
           return;
         }
 
-        // Sell current house for equity if owned
         const oldHouse = HOUSING_DATA.find(h => h.id === this.state.house);
         if (oldHouse && !oldHouse.isRent && oldHouse.price > 0) {
-          this.state.cash += oldHouse.price;
-          UI.notify('Imóvel anterior vendido', `Você recuperou ${Formatter.money(oldHouse.price)} da sua antiga moradia.`, 'gold');
+          const resale = Math.floor(oldHouse.price * 0.90);
+          this.state.cash += resale;
+          UI.notify('Imóvel anterior vendido', `Você recuperou ${Formatter.money(resale)} na venda do imóvel anterior.`, 'gold');
         }
 
         this.state.cash -= house.price;
         this.state.house = houseId;
         AudioEngine.fanfare();
         Confetti.boom(100);
-        UI.notify('Escritura Assinada!', `Parabéns! Você é o novo proprietário de: ${house.name}!`, 'gold', house.icon);
+        UI.notify('Escritura Assinada!', `Você comprou ${house.name}!`, 'gold', house.icon);
+        this.recalculateNetWorth();
+        UI.renderAll();
+      },
+
+      sellVehicle() {
+        const current = VEHICLES_DATA.find(v => v.id === this.state.vehicle);
+        if (!current || current.price <= 0) {
+          UI.notify('Nenhum veículo para vender', 'Você não possui um veículo próprio para vender.', 'warning', '🚗');
+          return;
+        }
+
+        const saleValue = Math.floor(current.price * 0.80);
+        this.state.cash += saleValue;
+        this.state.vehicle = 'a_pe';
+        UI.notify('Veículo vendido!', `${current.name} foi vendido por ${Formatter.money(saleValue)} (80% do valor de referência).`, 'success', '🚗');
         this.recalculateNetWorth();
         UI.renderAll();
       },
@@ -2952,18 +3400,17 @@
           return;
         }
 
-        // Trade-in old vehicle
         const oldVeh = VEHICLES_DATA.find(v => v.id === this.state.vehicle);
         if (oldVeh && oldVeh.price > 0) {
-          const tradeIn = Math.floor(oldVeh.price * 0.8);
+          const tradeIn = Math.floor(oldVeh.price * 0.80);
           this.state.cash += tradeIn;
-          UI.notify('Veículo antigo negociado', `Você recebeu ${Formatter.money(tradeIn)} na troca pelo veículo anterior.`, 'gold');
+          UI.notify('Veículo antigo negociado', `Você recebeu ${Formatter.money(tradeIn)} na troca.`, 'gold');
         }
 
         this.state.cash -= veh.price;
         this.state.vehicle = vehId;
         AudioEngine.levelUp();
-        UI.notify('Chave na mão!', `Você acaba de adquirir seu novo ${veh.name}!`, 'gold', veh.icon);
+        UI.notify('Chave na mão!', `Você adquiriu ${veh.name}!`, 'gold', veh.icon);
         this.recalculateNetWorth();
         UI.renderAll();
       },
@@ -3031,7 +3478,105 @@
         });
       },
 
+      /* COLLECTION SYSTEM */
+      getCollectionRarityRoll() {
+        // Probabilidades padrão: Comum 80%, Raro 17%, Mítico 2%, Lendário 1%.
+        // A raridade é sorteada ANTES do item, garantindo que cada item só possa
+        // aparecer dentro da sua própria faixa de raridade.
+        const roll = Math.random() * 100;
+        if (roll < 80) return 'comum';
+        if (roll < 97) return 'raro';
+        if (roll < 99) return 'mitico';
+        return 'lendario';
+      },
+
+      tryCollectionDrop(reason = 'jornada') {
+        // Drops são especiais: em média ~1 a cada 18 dias, com chance reduzida para evitar inflação.
+        let chance = 0.055;
+        if (reason === 'achievement') chance += 0.035;
+        if (reason === 'objective') chance += 0.025;
+        if (reason === 'promotion') chance += 0.02;
+        if (reason === 'event') chance += 0.025;
+        if (this.state.netWorth >= 10000000) chance *= 0.9;
+
+        if (Math.random() > chance) return false;
+
+        const rarity = this.getCollectionRarityRoll();
+        // Primeiro sorteamos a raridade; depois escolhemos SOMENTE um item dessa raridade.
+        // Se todos os itens daquela raridade já foram descobertos, não fazemos fallback
+        // para outra raridade, evitando quebrar as probabilidades e o balanceamento.
+        const candidates = COLLECTIONS_DATA.filter(item => item.rarity === rarity && !this.state.collectionHistory[item.id]);
+        if (!candidates.length) return false;
+
+        const item = candidates[Math.floor(Math.random() * candidates.length)];
+        return this.awardCollectionItem(item, 'drop');
+      },
+
+      awardCollectionItem(item, source = 'special') {
+        if (!item || this.state.collectionHistory[item.id]) {
+          // Item já conhecido: recompensa pequena e controlada, sem permitir duplicatas.
+          if (item && source === 'drop') {
+            const duplicateReward = Math.max(250, Math.floor(item.value * 0.025));
+            this.state.cash += duplicateReward;
+            UI.notify('🔄 Item repetido', `${item.name} já faz parte da sua história. Você recebeu ${Formatter.money(duplicateReward)} como recompensa.`, 'success', '💵');
+            this.recalculateNetWorth();
+            this.saveToStorage(false);
+            UI.renderAll();
+          }
+          return false;
+        }
+
+        this.state.collectionHistory[item.id] = `Ano ${this.state.year}, Mês ${this.state.month}`;
+        this.state.collections[item.id] = true;
+        this.state.collectionDrops++;
+        this.state.collectionLastDrop = item.id;
+        this.recalculateNetWorth();
+        this.saveToStorage(false);
+
+        UI.showCollectionDiscovery(item);
+        AudioEngine.levelUp();
+        UI.renderAll();
+        return true;
+      },
+
+      sellCollectionItem(itemId) {
+        const item = COLLECTIONS_DATA.find(x => x.id === itemId);
+        if (!item || !this.state.collections[itemId]) return;
+        // Comuns e raros são itens permanentes da coleção. Apenas míticos e lendários podem ser vendidos.
+        if (!['mitico', 'lendario'].includes(item.rarity)) {
+          UI.notify('🔒 Item não pode ser vendido', `${item.name} é um item ${COLLECTION_RARITIES[item.rarity]?.name || item.rarity} e deve permanecer na coleção.`, 'warning', '🔒');
+          return;
+        }
+        const confirmed = window.confirm(`Vender ${item.name} por ${Formatter.money(item.value)}?`);
+        if (!confirmed) return;
+
+        delete this.state.collections[itemId];
+        this.state.collectionSold++;
+        this.state.cash += item.value;
+        this.recalculateNetWorth();
+        this.saveToStorage(false);
+        UI.notify('💰 Colecionável vendido!', `Você vendeu ${item.name} por ${Formatter.money(item.value)}.`, 'success', '💵');
+        UI.renderAll();
+      },
+
+      getCollectionStats() {
+        const total = COLLECTIONS_DATA.length;
+        const discovered = Object.keys(this.state.collectionHistory).filter(id => COLLECTIONS_DATA.some(x => x.id === id)).length;
+        const owned = Object.keys(this.state.collections).filter(id => this.state.collections[id]).map(id => COLLECTIONS_DATA.find(x => x.id === id)).filter(Boolean);
+        const byRarity = { comum:0, raro:0, mitico:0, lendario:0 };
+        owned.forEach(i => byRarity[i.rarity]++);
+        const totalValue = owned.reduce((sum,i)=>sum+i.value,0);
+        const categories = {};
+        COLLECTIONS_DATA.forEach(i => {
+          if (!categories[i.category]) categories[i.category] = {total:0, discovered:0};
+          categories[i.category].total++;
+          if (this.state.collectionHistory[i.id]) categories[i.category].discovered++;
+        });
+        return { total, discovered, owned, byRarity, totalValue, categories };
+      },
+
       checkAchievements() {
+        const currentJob = () => JOBS_DATA.find(j => j.id === this.state.job);
         const checks = {
           ach_primeiro_passo: () => true,
           ach_primeiro_emprego: () => this.state.job !== 'desempregado',
@@ -3042,19 +3587,33 @@
           ach_investidor: () => Object.values(this.state.investments).some(v => v > 0),
           ach_empreendedor: () => Object.values(this.state.businesses).some(b => b.owned),
           ach_edu_50: () => this.state.education >= 50,
+          ach_salary10k: () => currentJob() && currentJob().monthlySalary >= 10000,
+          ach_salary20k: () => currentJob() && currentJob().monthlySalary >= 20000,
+          ach_salary50k: () => currentJob() && currentJob().monthlySalary >= 50000,
+          ach_salary100k: () => currentJob() && currentJob().monthlySalary >= 100000,
+          ach_salary200k: () => currentJob() && currentJob().monthlySalary >= 200000,
           ach_100k: () => this.state.netWorth >= 100000,
           ach_500k: () => this.state.netWorth >= 500000,
           ach_milionario: () => this.state.netWorth >= 1000000,
           ach_supercarro: () => ['esportivo', 'supercarro'].includes(this.state.vehicle),
-          ach_mansao: () => ['mansao', 'cobertura', 'mansao_alphaville', 'casa_praia', 'fazenda', 'ilha', 'palacio_futuro'].includes(this.state.house),
+          ach_mansao: () => ['mansao', 'cobertura_media', 'cobertura', 'mansao_alphaville', 'casa_praia', 'fazenda', 'ilha', 'palacio_futuro'].includes(this.state.house),
           ach_10m: () => this.state.netWorth >= 10000000,
           ach_conglomerado: () => Object.values(this.state.businesses).filter(b => b.owned).length >= 5,
           ach_ceu: () => ['helicoptero', 'jato', 'iate'].includes(this.state.vehicle),
           ach_edu_100: () => this.state.education >= 100,
           ach_rep_100: () => this.state.reputation >= 100,
+          ach_100k_inv: () => Object.values(this.state.investments).reduce((a,b)=>a+b,0) >= 100000,
           ach_ilha: () => ['ilha', 'palacio_futuro'].includes(this.state.house),
           ach_100m: () => this.state.netWorth >= 100000000,
           ach_bilionario: () => this.state.netWorth >= 1000000000
+          ,ach_colec_primeiro: () => Object.keys(this.state.collectionHistory).length >= 1
+          ,ach_colec_10: () => Object.keys(this.state.collectionHistory).length >= 10
+          ,ach_colec_50: () => Object.keys(this.state.collectionHistory).length >= 50
+          ,ach_colec_categoria: () => Object.values(this.getCollectionStats().categories).some(c => c.total > 0 && c.discovered >= c.total)
+          ,ach_colec_mitico: () => Object.keys(this.state.collectionHistory).some(id => COLLECTIONS_DATA.find(x => x.id === id)?.rarity === 'mitico')
+          ,ach_colec_lendario: () => Object.keys(this.state.collectionHistory).some(id => COLLECTIONS_DATA.find(x => x.id === id)?.rarity === 'lendario')
+          ,ach_colec_valor: () => this.getCollectionStats().totalValue >= 1000000
+          ,ach_colec_100: () => this.getCollectionStats().discovered >= COLLECTIONS_DATA.length
         };
 
         let newUnlock = false;
@@ -3065,19 +3624,16 @@
             if (achMeta) {
               UI.notify('🏆 Troféu Desbloqueado!', `${achMeta.name} — ${achMeta.desc}`, 'gold', achMeta.icon);
               newUnlock = true;
+              // Conquistas podem gerar uma descoberta especial, sem substituir a chance normal.
+              this.tryCollectionDrop('achievement');
             }
           }
         }
-        if (newUnlock) {
-          AudioEngine.levelUp();
-        }
+        if (newUnlock) AudioEngine.levelUp();
       }
     };
 
-    /* ==========================================================================
-       INVESTMENTS INTERACTION CONTROLLER
-       ========================================================================== */
-    const Investments = {
+        const Investments = {
       activeInvId: null,
 
       openModal(invId) {
@@ -3096,7 +3652,8 @@
         const currentInvested = Game.state.investments[this.activeInvId] || 0;
         document.getElementById('invest-modal-hint').innerHTML = `
           <strong>Disponível na conta:</strong> ${Formatter.money(Game.state.cash)}<br>
-          <strong>Total aplicado nesta opção:</strong> ${Formatter.money(currentInvested)}
+          <strong>Total aplicado nesta opção:</strong> ${Formatter.money(currentInvested)}<br>
+          <strong>Prazo:</strong> ${meta && meta.termMonths > 0 ? `${meta.termMonths} mês(es)` : 'liquidez imediata'} | <strong>Tempo aplicado:</strong> ${Game.state.investmentMonthsHeld[this.activeInvId] || 0} mês(es)
         `;
       },
 
@@ -3125,6 +3682,9 @@
 
         Game.state.cash -= amount;
         Game.state.investments[this.activeInvId] = (Game.state.investments[this.activeInvId] || 0) + amount;
+        if (Game.state.investmentMonthsHeld[this.activeInvId] === undefined) {
+          Game.state.investmentMonthsHeld[this.activeInvId] = 0;
+        }
         AudioEngine.coin();
         UI.notify('Aplicação Realizada!', `${Formatter.money(amount)} aplicados com sucesso.`, 'success', '📈');
         this.updateHint();
@@ -3141,6 +3701,13 @@
         }
 
         const current = Game.state.investments[this.activeInvId] || 0;
+        const meta = INVESTMENTS_DATA.find(x => x.id === this.activeInvId);
+        const heldMonths = Game.state.investmentMonthsHeld[this.activeInvId] || 0;
+        if (meta && meta.termMonths > 0 && current > 0 && heldMonths < meta.termMonths) {
+          UI.notify('Prazo ainda não cumprido', `${meta.name} possui prazo mínimo de ${meta.termMonths} mês(es). Já passaram ${heldMonths}.`, 'warning', '⏳');
+          AudioEngine.buzzer();
+          return;
+        }
         if (current < amount) {
           UI.notify('Saldo investido insuficiente', `Você possui apenas ${Formatter.money(current)} nesta modalidade.`, 'warning');
           AudioEngine.buzzer();
@@ -3149,6 +3716,9 @@
 
         Game.state.investments[this.activeInvId] -= amount;
         Game.state.cash += amount;
+        if (Game.state.investments[this.activeInvId] <= 0) {
+          Game.state.investmentMonthsHeld[this.activeInvId] = 0;
+        }
         AudioEngine.coin();
         UI.notify('Resgate Concluído!', `${Formatter.money(amount)} transferidos para sua conta líquida.`, 'success', '💰');
         this.updateHint();
@@ -3180,6 +3750,7 @@
         document.getElementById('btn-quick-work').addEventListener('click', () => Game.work());
         document.getElementById('btn-quick-sleep').addEventListener('click', () => Game.sleep());
         document.getElementById('btn-quick-eat').addEventListener('click', () => Game.quickEat());
+        document.getElementById('btn-quick-rest').addEventListener('click', () => Game.rest());
 
         // Header controls
         document.getElementById('btn-sound-toggle').addEventListener('click', () => {
@@ -3343,6 +3914,7 @@
         this.renderFoodAndLeisure();
         this.renderObjectives();
         this.renderAchievements();
+        this.renderCollections();
         this.renderStats();
       },
 
@@ -3352,6 +3924,10 @@
         // Vitals
         document.getElementById('bar-happiness').style.width = `${s.happiness}%`;
         document.getElementById('val-happiness').innerText = `${s.happiness}%`;
+        document.getElementById('bar-health').style.width = `${s.health}%`;
+        document.getElementById('val-health').innerText = `${s.health}%`;
+        document.getElementById('bar-sleep').style.width = `${Math.max(0, 100 - s.sleepDebt)}%`;
+        document.getElementById('val-sleep').innerText = `${Math.max(0, 100 - s.sleepDebt)}%`;
 
         document.getElementById('bar-energy').style.width = `${s.energy}%`;
         document.getElementById('val-energy').innerText = `${s.energy}%`;
@@ -3425,7 +4001,11 @@
 
         JOBS_DATA.forEach(job => {
           const isCurrent = (Game.state.job === job.id);
-          const isLocked = (Game.state.education < job.reqEdu);
+          const eduLocked = (Game.state.education < job.reqEdu);
+          const exp = Game.state.stats.totalCareerDays || Game.state.stats.shiftsWorked;
+          const expLocked = exp < (job.reqShifts || 0);
+          const isLocked = eduLocked || expLocked;
+          const monthly = job.monthlySalary || job.salary * 26;
 
           const card = document.createElement('div');
           card.className = `item-card ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''}`;
@@ -3444,16 +4024,20 @@
 
               <div class="card-meta-list">
                 <div class="card-meta-row">
-                  <span class="card-meta-label">Salário por Dia:</span>
-                  <span class="card-meta-value" style="color: var(--success); font-weight: 700;">+${Formatter.money(job.salary)}</span>
+                  <span class="card-meta-label">Salário:</span>
+                  <span class="card-meta-value" style="color: var(--success); font-weight: 700;">~${Formatter.money(monthly)}/mês</span>
                 </div>
                 <div class="card-meta-row">
-                  <span class="card-meta-label">Educação Exigida:</span>
-                  <span class="card-meta-value" style="color: ${isLocked ? 'var(--danger)' : 'var(--primary)'}">${job.reqEdu} pts ${isLocked ? '🔒' : '✓'}</span>
+                  <span class="card-meta-label">Por dia de trabalho:</span>
+                  <span class="card-meta-value">${Formatter.money(job.salary)}</span>
                 </div>
                 <div class="card-meta-row">
-                  <span class="card-meta-label">Consumo de Energia:</span>
-                  <span class="card-meta-value" style="color: var(--warning);">-${job.energyCost}⚡</span>
+                  <span class="card-meta-label">Educação:</span>
+                  <span class="card-meta-value" style="color: ${eduLocked ? 'var(--danger)' : 'var(--primary)'}">${job.reqEdu} pts ${eduLocked ? '🔒' : '✓'}</span>
+                </div>
+                <div class="card-meta-row">
+                  <span class="card-meta-label">Experiência:</span>
+                  <span class="card-meta-value" style="color: ${expLocked ? 'var(--danger)' : 'var(--primary)'}">${job.reqShifts} dias de carreira ${expLocked ? '🔒' : '✓'}</span>
                 </div>
               </div>
             </div>
@@ -3463,7 +4047,7 @@
                 <button class="btn btn-success" onclick="Game.work()">💼 Trabalhar Hoje</button>
               ` : `
                 <button class="btn btn-primary" ${isLocked ? 'disabled' : ''} onclick="Game.applyJob('${job.id}')">
-                  ${isLocked ? `Exige ${job.reqEdu} de Educação` : 'Candidatar-se'}
+                  ${eduLocked ? `Exige ${job.reqEdu} Educação` : expLocked ? `Exige ${job.reqShifts} dias de carreira` : 'Candidatar-se'}
                 </button>
               `}
             </div>
@@ -3478,6 +4062,7 @@
 
         EDUCATION_DATA.forEach(course => {
           const canAfford = (Game.state.cash >= course.cost);
+          const meetsReq = Game.state.education >= (course.reqEdu || 0);
           const isMaxed = (Game.state.education >= 100);
           const isDone = Game.state.completedCourses.includes(course.id);
 
@@ -3506,11 +4091,15 @@
                   <span class="card-meta-label">Duração & Esforço:</span>
                   <span class="card-meta-value">${course.days} dia(s) • -${course.energyCost}⚡</span>
                 </div>
+                <div class="card-meta-row">
+                  <span class="card-meta-label">Pré-requisito:</span>
+                  <span class="card-meta-value" style="color: ${(Game.state.education < (course.reqEdu || 0)) ? 'var(--danger)' : 'var(--primary)'}">${course.reqEdu || 0} Educação</span>
+                </div>
               </div>
             </div>
 
-            <button class="btn btn-primary" ${(!canAfford || isMaxed || isDone) ? 'disabled' : ''} onclick="Game.study('${course.id}')">
-              ${isDone ? 'Concluído ✔' : isMaxed ? 'Educação Máxima (100)' : (canAfford ? `Estudar (${Formatter.money(course.cost)})` : 'Saldo Insuficiente')}
+            <button class="btn btn-primary" ${(!canAfford || !meetsReq || isMaxed || isDone) ? 'disabled' : ''} onclick="Game.study('${course.id}')">
+              ${isDone ? 'Concluído ✔' : isMaxed ? 'Educação Máxima (100)' : !meetsReq ? `Exige ${course.reqEdu} Educação` : (canAfford ? `Estudar (${Formatter.money(course.cost)})` : 'Saldo Insuficiente')}
             </button>
           `;
           grid.appendChild(card);
@@ -3562,10 +4151,15 @@
 
             <div>
               ${isCurrent ? `
-                <button class="btn btn-secondary" disabled>Morando Aqui</button>
+                ${house.isRent ? `<button class="btn btn-secondary" disabled>Morando Aqui</button>` : `
+                  <div style="display:grid;gap:8px;">
+                    <button class="btn btn-secondary" disabled>Morando Aqui</button>
+                    <button class="btn btn-outline-danger" onclick="Game.sellHouse()">Vender por ~${Formatter.money(Math.floor(house.price * 0.90))}</button>
+                  </div>
+                `}
               ` : `
                 <button class="btn btn-primary" ${!canAfford ? 'disabled' : ''} onclick="Game.buyHouse('${house.id}')">
-                  ${house.isRent ? 'Alugar Quarto' : `Comprar Imóvel (${Formatter.money(house.price)})`}
+                  ${house.isRent ? 'Alugar Moradia' : `Comprar Imóvel (${Formatter.money(house.price)})`}
                 </button>
               `}
             </div>
@@ -3617,7 +4211,12 @@
 
             <div>
               ${isCurrent ? `
-                <button class="btn btn-secondary" disabled>Veículo Atual</button>
+                ${veh.price > 0 ? `
+                  <div style="display:grid;gap:8px;">
+                    <button class="btn btn-secondary" disabled>Veículo Atual</button>
+                    <button class="btn btn-outline-danger" onclick="Game.sellVehicle()">Vender por ~${Formatter.money(Math.floor(veh.price * 0.80))}</button>
+                  </div>
+                ` : `<button class="btn btn-secondary" disabled>Transporte Atual</button>`}
               ` : `
                 <button class="btn btn-primary" ${!canAfford ? 'disabled' : ''} onclick="Game.buyVehicle('${veh.id}')">
                   Comprar (${Formatter.money(veh.price)})
@@ -3681,6 +4280,10 @@
                 <div class="card-meta-row">
                   <span class="card-meta-label">Nível de Risco:</span>
                   <span class="card-meta-value" style="color: var(--warning);">${inv.risk}</span>
+                </div>
+                <div class="card-meta-row">
+                  <span class="card-meta-label">Prazo mínimo:</span>
+                  <span class="card-meta-value">${inv.termMonths > 0 ? `${inv.termMonths} mês(es)` : 'Liquidez imediata'}</span>
                 </div>
               </div>
             </div>
@@ -3797,7 +4400,7 @@
                 </div>
                 <div class="card-meta-row">
                   <span class="card-meta-label">Recuperação:</span>
-                  <span class="card-meta-value" style="color: var(--warning);">+${food.hungerGain}% Saciedade • +${food.happinessGain} Fel.</span>
+                  <span class="card-meta-value" style="color: var(--warning);">+${food.hungerGain}% Saciedade • +${food.energyGain || 0}⚡ • +${food.happinessGain} Fel.</span>
                 </div>
               </div>
             </div>
@@ -3899,6 +4502,103 @@
         document.getElementById('badge-ach').innerText = unlockedCount;
       },
 
+      showCollectionDiscovery(item) {
+        const rarity = COLLECTION_RARITIES[item.rarity] || COLLECTION_RARITIES.comum;
+        const box = document.getElementById('collection-discovery-box');
+        box.className = `modal-box collection-discovery ${rarity.className}`;
+        document.getElementById('collection-discovery-icon').innerText = item.icon;
+        document.getElementById('collection-discovery-name').innerText = item.name;
+        document.getElementById('collection-discovery-rarity').innerHTML = `<span class="rarity-pill rarity-${rarity.className}">${rarity.icon} ${rarity.name}</span>`;
+        document.getElementById('collection-discovery-category').innerText = `${this.collectionCategoryName(item.category)}${item.artist ? ` • ${item.artist}` : ''}`;
+        document.getElementById('collection-discovery-desc').innerText = item.description;
+        document.getElementById('collection-discovery-value').innerText = `Valor de venda: ${Formatter.money(item.value)}`;
+        UI.openModal('modal-collection-discovery');
+      },
+
+      collectionCategoryName(category) {
+        return ({
+          carros:'🚗 Carros', artefatos:'🏺 Artefatos', joias:'💎 Joias',
+          trofeus:'🏆 Troféus', quadros:'🖼️ Quadros'
+        })[category] || category;
+      },
+
+      renderCollections() {
+        const grid = document.getElementById('collections-grid');
+        if (!grid) return;
+        const stats = Game.getCollectionStats();
+        const categoryFilter = document.getElementById('collection-category-filter')?.value || 'all';
+        const rarityFilter = document.getElementById('collection-rarity-filter')?.value || 'all';
+        const onlyUndiscovered = Boolean(document.getElementById('collection-undiscovered')?.checked);
+        const sort = document.getElementById('collection-sort')?.value || 'rarity';
+
+        const statsEl = document.getElementById('collection-stats');
+        const pct = stats.total ? Math.floor((stats.discovered / stats.total) * 100) : 0;
+        statsEl.innerHTML = `
+          <div class="collection-stat"><span class="card-meta-label">Itens descobertos</span><strong>${stats.discovered}/${stats.total}</strong><div class="collection-progress-bar"><div style="width:${pct}%"></div></div><small style="color:var(--text-muted)">${pct}% completo</small></div>
+          <div class="collection-stat"><span class="card-meta-label">Valor das coleções mantidas</span><strong style="color:var(--gold)">${Formatter.money(stats.totalValue)}</strong></div>
+          <div class="collection-stat"><span class="card-meta-label">🟡 Lendários</span><strong>${stats.byRarity.lendario}</strong></div>
+          <div class="collection-stat"><span class="card-meta-label">🟣 Míticos</span><strong>${stats.byRarity.mitico}</strong></div>
+          <div class="collection-stat"><span class="card-meta-label">🔵 Raros</span><strong>${stats.byRarity.raro}</strong></div>
+          <div class="collection-stat"><span class="card-meta-label">🟢 Comuns</span><strong>${stats.byRarity.comum}</strong></div>
+        `;
+
+        const categoryLabels = ['carros','artefatos','joias','trofeus','quadros'];
+        const categoryProgress = categoryLabels.map(cat => {
+          const c = stats.categories[cat];
+          return `<div class="collection-stat"><span class="card-meta-label">${this.collectionCategoryName(cat)}</span><strong>${c.discovered}/${c.total}</strong></div>`;
+        }).join('');
+        statsEl.insertAdjacentHTML('beforeend', categoryProgress);
+
+        let items = COLLECTIONS_DATA.filter(item => {
+          const discovered = Boolean(Game.state.collectionHistory[item.id]);
+          if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
+          if (rarityFilter !== 'all' && item.rarity !== rarityFilter) return false;
+          if (onlyUndiscovered && discovered) return false;
+          return true;
+        });
+
+        const rarityOrder = {lendario:0, mitico:1, raro:2, comum:3};
+        items.sort((a,b) => {
+          if (sort === 'value') return b.value - a.value;
+          if (sort === 'name') return a.name.localeCompare(b.name);
+          if (sort === 'category') return a.category.localeCompare(b.category) || a.name.localeCompare(b.name);
+          if (sort === 'recent') {
+            const da = Game.state.collectionHistory[a.id] || '';
+            const db = Game.state.collectionHistory[b.id] || '';
+            return db.localeCompare(da);
+          }
+          return rarityOrder[a.rarity] - rarityOrder[b.rarity] || a.name.localeCompare(b.name);
+        });
+
+        grid.innerHTML = '';
+        items.forEach(item => {
+          const discovered = Boolean(Game.state.collectionHistory[item.id]);
+          const owned = Boolean(Game.state.collections[item.id]);
+          const rarity = COLLECTION_RARITIES[item.rarity];
+          const card = document.createElement('div');
+          card.className = `collection-card ${owned ? 'owned' : ''} ${discovered && !owned ? 'sold' : ''} ${!discovered ? 'locked' : ''}`;
+          const artist = item.artist ? `<div>Artista: ${item.artist}</div>` : '';
+          card.innerHTML = `
+            <div class="collection-icon">${discovered ? item.icon : '❓'}</div>
+            <div class="collection-name">${discovered ? item.name : '???'}</div>
+            <span class="rarity-pill rarity-${rarity.className}">${rarity.icon} ${rarity.name}</span>
+            <div class="collection-meta" style="margin-top:8px;">
+              <div>${this.collectionCategoryName(item.category)}</div>
+              ${artist}
+              ${discovered ? `<div style="margin-top:4px;">${item.description}</div><div style="margin-top:5px;">Quantidade: <strong>${owned ? '1/1' : '0/1'}</strong></div><div style="color:var(--gold);font-weight:700;margin-top:5px;">Valor: ${Formatter.money(item.value)}</div>` : '<div style="margin-top:5px;">🔒 Não descoberto</div><div style="margin-top:5px;">Quantidade: <strong>0/1</strong></div>'}
+              ${discovered && !owned ? '<div style="margin-top:5px;color:var(--warning);">✓ Já descoberto • vendido</div>' : ''}
+            </div>
+            <div style="margin-top:12px;">
+              ${owned && ['mitico','lendario'].includes(item.rarity) ? `<button class="btn btn-secondary" onclick="Game.sellCollectionItem('${item.id}')">💰 Vender por ${Formatter.money(item.value)}</button>` : ''}
+              ${owned && ['comum','raro'].includes(item.rarity) ? '<div style="padding:9px 10px;border-radius:8px;background:rgba(148,163,184,.08);color:var(--text-muted);font-size:.8rem;text-align:center;">🔒 Item não pode ser vendido</div>' : ''}
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        document.getElementById('badge-collections').innerText = stats.discovered;
+      },
+
       renderStats() {
         const s = Game.state;
         document.getElementById('stat-total-earned-work').innerText = Formatter.money(s.stats.totalEarnedWork);
@@ -3913,6 +4613,8 @@
         document.getElementById('stat-total-days').innerText = s.stats.totalDays;
         document.getElementById('stat-total-months').innerText = s.stats.totalMonths;
         document.getElementById('stat-total-trips').innerText = s.stats.totalTrips;
+        document.getElementById('stat-career-days').innerText = s.stats.totalCareerDays || s.stats.shiftsWorked;
+        document.getElementById('stat-food-spent').innerText = Formatter.money(s.stats.totalFoodSpent || 0);
       },
 
       renderNetWorthModal() {
